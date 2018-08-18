@@ -1,0 +1,24 @@
+* {
+	margin: 0;
+	padding: 0;
+	outline: 0;
+	box-sizing: border-box;
+}
+
+.plano {
+	position: relative;
+	background-image: url(plano.png);
+	background-size: cover;
+	height: 692px;
+	width: 900px;
+}
+
+.cochera {
+	width: 66.7px;
+	height: 31.7px;
+	background: #ff000096;
+	position: absolute;
+}
+.cochera.libre {
+	background: green;
+}
