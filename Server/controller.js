@@ -32,14 +32,23 @@ module.exports = {
 				this.checkSerial();
 			} else {
 				var info = "Puertos disponibles: ";
-				puertos.forEach(function(puerto) {
-					console.log(puerto);
+				var target_serial_number = "5&521a615&0&6"; // Este es el numero serial de nuestro Arduino MEGA
+				var target_id = -1;
+				
+				for(var i = 0; i < puertos.length; i++) {
+					var puerto = puertos[i];
+					if(puerto.serialNumber == target_serial_number)
+						target_id = i;
 					info += puerto.comName + " ";
-				});
+				}
 				console.log(info);
 				
-				// TODO elegir por numero de serie?
-				this.connect(puertos[1].comName);
+				if(target_id == -1) {
+					console.log("No esta conectado un Arduino con el numero serial " + target_serial_number + ".");
+					this.checkSerial();
+				} else {
+					this.connect(puertos[target_id].comName);
+				}
 			}
 		}.bind(this));
 	},
