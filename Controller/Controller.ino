@@ -1,9 +1,9 @@
 const int BUFFER_SIZE = 2;
-const int BUS_TIMEOUT = 5; // en ms
-const int PLACAS = 8; // TODO Cambiar a 40
-const int PLACAS_START = 49; // TODO Cambiar a 200
+const int BUS_TIMEOUT = 1000; // en ms
+const int PLACAS = 16;
+const int PLACAS_START = 200;
 
-int BUFFER[BUFFER_SIZE];
+char BUFFER[BUFFER_SIZE];
 unsigned long last_packet_time = 0;
 int last_packet_id = 0;
 
@@ -15,6 +15,20 @@ void setup() {
   Serial.begin(9600);
   // Serial1 = Arduino y maqueta
   Serial1.begin(9600);
+}
+
+void placa_estado(int id, char estado) {
+    int nro_placa = id - PLACAS_START;
+    Serial.write((char)id);
+    Serial.write(estado);
+    /*
+    if(barrido[nro_placa] != libre) {
+      // el estado cambio, actualizamos y notificamos al server
+      Serial.write((char)id);
+      Serial.write((char)(libre ? 'L' : 'O'));
+      barrido[nro_placa] = libre;
+    }
+    */
 }
 
 // esta funcion se llama cuando el bus esta libre
@@ -44,22 +58,15 @@ void bus_send(int id, char data) {
 
 // esto se llama cuando el modulo ID envia el dato data
 void bus_receive(int id, char data) {
-  if(id >= 200) {
+  if(id >= PLACAS_START) {
     // es el paquete de una cochera
-    int nro_placa = id - PLACAS_START;
-    bool estado = data == 'l';
-
-    if(barrido[nro_placa] != estado) {
-      // el estado cambio, actualizamos y notificamos al server
-      Serial.write((char)id);
-      Serial.write((char)data);
-      barrido[nro_placa] = estado;
-    }
-    
+    placa_estado(id, data);
   } else {
     // si es el paquete de cualquier otro modulo, se reenvia al server
-    Serial.write((char)id);
-    Serial.write((char)data);
+    //Serial.write((char)id);
+    //Serial.write((char)data);
+    Serial.write(0);
+    Serial.write(1);
   }
 }
 
@@ -73,6 +80,13 @@ void bus_loop() {
   if(delta > BUS_TIMEOUT) {
     // el modulo que se hablo ultimo no respondio en BUS_TIMEOUT ms
     // asumimos que no va a responder y seguimos usando el bus para otra cosa
+
+    // antes nos fijamos si nos tenia que responder una placa
+    if(last_packet_id >= PLACAS_START) {
+      // si no nos repondio, significa que se desconecto, la marcamos como ocupada
+      placa_estado(last_packet_id, 'O');
+    }
+    
     bus_next();
   } else {
     // hay algo para leer del bus?
@@ -85,11 +99,11 @@ void bus_loop() {
       }
       BUFFER[0] = Serial1.read();
 
-      if(BUFFER[1] >= 200) {
+      if(BUFFER[1] >= PLACAS_START) {
         // si es >= siginifica que tenemos un paquete valido en BUFFER
         
         // lo procesamos
-        bus_receive((char)BUFFER[1], (char)BUFFER[0]);
+        bus_receive((int)BUFFER[1], (char)BUFFER[0]);
 
         // si respondio el modulo que le hablamos recien seguimos
         if(BUFFER[1] == last_packet_id) {

@@ -23,8 +23,9 @@ Controller.onDataReceived = function(data) {
 	while(buffer.length >= 2) {
 		var id = buffer.shift();
 		
-		if(id >= 48 && id <= 57) {
+		if(id >= 200) {
 			var estado = buffer.shift();
+			console.log(id + ":" + estado);
 			io.emit('estado', { id: id, libre: (estado == 76) });
 		}
 	}

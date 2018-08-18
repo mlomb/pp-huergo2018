@@ -40,7 +40,7 @@ function generarCocherasLado(x_off, y_off, start) {
 }
 function generarCocheras() {
 	$(".plano").html('');
-	var start = 49;
+	var start = 200;
 	generarCocherasLado(164.4,144.3, start);
 	generarCocherasLado(164.4,420.3, start + 20);
 
