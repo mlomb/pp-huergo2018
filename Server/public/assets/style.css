@@ -1,10 +1,60 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 * {
 	margin: 0;
 	padding: 0;
 	outline: 0;
 	box-sizing: border-box;
+	/* font-family: 'Roboto', sans-serif; */
+}
+.page-content{
+	width:1024px;
+	margin: 0px auto;		
+	padding-top: 15px;
+}
+/************************
+*********HEADER**********
+************************/
+.title-pic{
+	width: 65px;
+	margin-top: -8px;
+	margin-right: 7px;
 }
 
+/************************
+*********SERIE**********
+************************/
+.serie {
+	width: 400px;
+	height: 150px;
+}
+.serie input {
+	width: 100%;
+}
+.serie .row {
+	font-size: 18px;
+	padding: 6px;
+}
+.serie .row i {
+	vertical-align: middle;
+}
+.serie .row.sale {
+	background: #ff7a7a5c;
+}
+.serie .row.entra {
+	background: #94ff7a5c;
+}
+
+/************************
+*********PLANO**********
+************************/
+.plano-container {
+	display: table;
+    border: 5px solid #ffda00;
+    border-radius: 5px;
+    margin: 0px auto;
+    margin-top: 15px;
+}
 .plano {
 	position: relative;
 	background-image: url(plano.png);
@@ -12,7 +62,6 @@
 	height: 692px;
 	width: 900px;
 }
-
 .cochera {
 	width: 66.7px;
 	height: 31.7px;
@@ -22,4 +71,24 @@
 }
 .cochera.libre {
 	background: green;
+}
+/************************
+*******GUIA PLANO********
+************************/
+.guia{
+
+}
+.guia .colores{
+
+}
+.guia .colores .color{
+	display:inline-block;
+	width:25px;
+	height:25px;
+	vertical-align: middle;
+	margin-right:4px;
+	border-radius: 3px;
+}
+.guia .colores p{
+	display:inline-block;
 }

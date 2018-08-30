@@ -1,0 +1,73 @@
+<html>
+	<head>
+		<% include ../partials/head.html %>
+	</head>
+	<body>
+		<% include ../partials/header.html %>
+
+        <main class="mdl-layout__content">
+			<section class="mdl-layout__tab-panel is-active" id="estacionamiento">
+				<div class="page-content">
+					<h3>Estado actual de cocheras: </h3>
+					<div class="plano-container">
+						<div class="plano"></div>
+					</div>
+					<div class="guia">
+							<div class="colores">
+								<h5>Guía de colores</h5>								
+									<div class="color" style="background-color:red;"></div><p>Ocupado</p>
+									<div class="color" style="background-color:green;"></div><p>Libre</p>
+									<div class="color" style="background-color:blue;"></div><p>Reservado</p>									
+							</div>
+					</div>
+				</div>
+			</section>
+			<section class="mdl-layout__tab-panel" id="monitor-serie">
+				<div class="page-content">
+					<div class="serie">
+						<div class="serie-rows">
+							<div class="row sale"><i class="material-icons">arrow_back</i>201, L</div>
+							<div class="row entra"><i class="material-icons">arrow_forward</i>203, O</div>
+							<div class="row sale"><i class="material-icons">arrow_back</i>201, L</div>
+							<div class="row entra"><i class="material-icons">arrow_forward</i>203, O</div>
+							<div class="row sale"><i class="material-icons">arrow_back</i>201, L</div>
+							<div class="row entra"><i class="material-icons">arrow_forward</i>203, O</div>
+							<div class="row sale"><i class="material-icons">arrow_back</i>201, L</div>
+							<div class="row entra"><i class="material-icons">arrow_forward</i>203, O</div>
+						</div>
+						<div class="mdl-grid">
+							<div class="mdl-cell mdl-cell--4-col">
+								<label>ID</label>
+								<select>
+									<optgroup label="Placas">
+										<% for(var i = 200; i < 240; i++){ %>
+											<option value="<%= i %>''">#<%= i %></option>
+										<% } %>
+									</optgroup>
+								</select>
+							</div>
+							<div class="mdl-cell mdl-cell--4-col">
+								<label>Dato</label>
+								<select>
+									<optgroup label="Letras">
+										<% 
+										var l = "ern";
+										for(var i = 0; i < l.length; i++){
+										%>
+											<option value="<%= l.charCodeAt(i) %>">'<%= l[i] %>'</option>
+										<% } %>
+									</optgroup>
+								</select>
+							</div>
+							<div class="mdl-cell mdl-cell--4-col">
+									<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Enviar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+		
+		<% include ../partials/footer.html %>
+	</body>
+</html>

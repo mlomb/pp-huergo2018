@@ -54,7 +54,7 @@ io.on('connection', function (socket) {
 });
 
 app.get('/', function(req, res) {
-	res.render('index.html', {foo:"bar", a:0});
+	res.render('pages/index.html', {foo:"bar", a:0});
 });
 
 Controller.init();
