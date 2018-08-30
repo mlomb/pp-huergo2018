@@ -1,13 +1,13 @@
 const int BUFFER_SIZE = 2;
-const int BUS_TIMEOUT = 1000; // en ms
-const int PLACAS = 16;
-const int PLACAS_START = 200;
+const int BUS_TIMEOUT = 15; // en ms
+const unsigned char PLACAS = 16;
+const unsigned char PLACAS_START = 200;
 
-char BUFFER[BUFFER_SIZE];
+unsigned char BUFFER[BUFFER_SIZE];
 unsigned long last_packet_time = 0;
-int last_packet_id = 0;
+unsigned char last_packet_id = 0;
 
-int barrido_last = PLACAS_START;
+unsigned char barrido_last = PLACAS_START;
 bool barrido[PLACAS]; // guarda el estado de las placas | true=libre
 
 void setup() {
@@ -17,9 +17,9 @@ void setup() {
   Serial1.begin(9600);
 }
 
-void placa_estado(int id, char estado) {
+void placa_estado(unsigned char id, unsigned char estado) {
     int nro_placa = id - PLACAS_START;
-    Serial.write((char)id);
+    Serial.write(id);
     Serial.write(estado);
     /*
     if(barrido[nro_placa] != libre) {
@@ -49,7 +49,7 @@ void bus_next() {
 // solo tiene que ser llamada desde bus_next
 // esto setea last_packet_* y esperara a que el bus responda
 // antes de volver a llamar a bus_next
-void bus_send(int id, char data) {
+void bus_send(unsigned char id, unsigned char data) {
   Serial1.write(id);
   Serial1.write(data);
   last_packet_id = id;
@@ -57,7 +57,7 @@ void bus_send(int id, char data) {
 }
 
 // esto se llama cuando el modulo ID envia el dato data
-void bus_receive(int id, char data) {
+void bus_receive(unsigned char id, unsigned char data) {
   if(id >= PLACAS_START) {
     // es el paquete de una cochera
     placa_estado(id, data);
@@ -98,12 +98,12 @@ void bus_loop() {
         BUFFER[i + 1] = BUFFER[i];
       }
       BUFFER[0] = Serial1.read();
-
+      
       if(BUFFER[1] >= PLACAS_START) {
         // si es >= siginifica que tenemos un paquete valido en BUFFER
         
         // lo procesamos
-        bus_receive((int)BUFFER[1], (char)BUFFER[0]);
+        bus_receive(BUFFER[1], BUFFER[0]);
 
         // si respondio el modulo que le hablamos recien seguimos
         if(BUFFER[1] == last_packet_id) {
