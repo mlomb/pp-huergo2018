@@ -7,6 +7,8 @@ unsigned char BUFFER[BUFFER_SIZE];
 unsigned long last_packet_time = 0;
 unsigned char last_packet_id = 0;
 
+unsigned char BUFFER_SERVER[BUFFER_SIZE];
+
 unsigned char barrido_last = PLACAS_START;
 bool barrido[PLACAS]; // guarda el estado de las placas | true=libre
 
@@ -113,7 +115,21 @@ void bus_loop() {
 
 void sv_loop() {
   // TODO Que lea lo que le manda el server y lo reenvie al bus
-  
+  while(Serial.available()) {
+    for(int i = 0; i < BUFFER_SIZE - 1; i++) {
+      BUFFER_SERVER[i + 1] = BUFFER_SERVER[i];
+    }
+    BUFFER_SERVER[0] = Serial.read();
+
+    switch(BUFFER_SERVER[0]) {
+      case 199: // init
+        for(int i = 0; i < PLACAS; i++) {
+          Serial.write(PLACAS_START + i);
+          Serial.write((barrido[i] ? 'L' : 'O'));
+        }
+      break;
+    }
+  }
 }
 
 void loop() {

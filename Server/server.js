@@ -9,7 +9,7 @@ var buffer = [];
 var placas_estados = {};
 
 Controller.onConnect = function() {
-	Controller.send("hello");
+	Controller.send([0]);
 }
 Controller.onClose = function() {
 	
