@@ -19,16 +19,13 @@ void setup() {
 
 void placa_estado(unsigned char id, unsigned char estado) {
     int nro_placa = id - PLACAS_START;
-    Serial.write(id);
-    Serial.write(estado);
-    /*
+    bool libre = estado == 'L';
     if(barrido[nro_placa] != libre) {
       // el estado cambio, actualizamos y notificamos al server
-      Serial.write((char)id);
-      Serial.write((char)(libre ? 'L' : 'O'));
+      Serial.write(id);
+      Serial.write((libre ? 'L' : 'O'));
       barrido[nro_placa] = libre;
     }
-    */
 }
 
 // esta funcion se llama cuando el bus esta libre
@@ -40,7 +37,7 @@ void bus_next() {
   // si no hay otra cosa que mandar
   // seguimos barriendo
   barrido_last++;
-  if(barrido_last > PLACAS_START + PLACAS)
+  if(barrido_last >= PLACAS_START + PLACAS)
     barrido_last = PLACAS_START;
   bus_send(barrido_last, 'e');
 }
@@ -116,6 +113,7 @@ void bus_loop() {
 
 void sv_loop() {
   // TODO Que lea lo que le manda el server y lo reenvie al bus
+  
 }
 
 void loop() {

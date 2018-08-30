@@ -6,6 +6,7 @@ var fs      = require('fs'),
 
 var Controller = require('./controller.js');
 var buffer = [];
+var placas_estados = {};
 
 Controller.onConnect = function() {
 	Controller.send("hello");
@@ -25,8 +26,9 @@ Controller.onDataReceived = function(data) {
 		
 		if(id >= 200) {
 			var estado = buffer.shift();
+			placas_estados[id] = estado == 76;
 			console.log(id + ":" + estado);
-			io.emit('estado', { id: id, libre: (estado == 76) });
+			io.emit('estado', placas_estados);
 		}
 	}
 	//console.log("Recibido: " + data);
@@ -43,6 +45,7 @@ app.engine('html', require('ejs').renderFile);
 
 io.on('connection', function (socket) {
 	// un usuario se conecto por WebSockets
+	io.emit('estado', placas_estados);
 	socket.emit('event_name', { hello: 'world' });
 	socket.on('event_name', function (data) {
 		console.log(data);

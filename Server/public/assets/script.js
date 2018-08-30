@@ -14,8 +14,10 @@ socket.on('serial', function (data) {
 	$("#serial").append((data.direction == 'sended' ? '←' : '→') + " " + data.data);
 });
 
-socket.on('estado', function (data) {
-	$("#cochera-" + data.id).toggleClass('libre', data.libre);
+socket.on('estado', function (placas_estados) {
+	for(var id in placas_estados) {
+		$("#cochera-" + id).toggleClass('libre', placas_estados[id]);
+	}
 });
 
 function generarCocherasLinea(x_off, y_off, start) {
