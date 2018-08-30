@@ -18,6 +18,7 @@
 	height: 31.7px;
 	background: #ff000096;
 	position: absolute;
+	cursor: pointer;
 }
 .cochera.libre {
 	background: green;

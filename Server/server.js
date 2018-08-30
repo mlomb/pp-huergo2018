@@ -46,9 +46,10 @@ app.engine('html', require('ejs').renderFile);
 io.on('connection', function (socket) {
 	// un usuario se conecto por WebSockets
 	io.emit('estado', placas_estados);
-	socket.emit('event_name', { hello: 'world' });
-	socket.on('event_name', function (data) {
-		console.log(data);
+
+	socket.on('reservar', function (data) {
+		//console.log(data.id);
+		Controller.send([data.id, 114]);
 	});
 });
 

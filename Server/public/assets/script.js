@@ -25,7 +25,7 @@ function generarCocherasLinea(x_off, y_off, start) {
 	var dist = 0;
 	for(var i = 3; i >= 0; i--) {
 		var y = i * 33.8;
-		$(".plano").append('<div class="cochera" id="cochera-' + id + '"></div>');
+		$(".plano").append('<div class="cochera" data-id="' + id + '" id="cochera-' + id + '"></div>');
 		var c = $(".plano .cochera:last");
 		c.css('left', x_off);
 		c.css('top', y + y_off);
@@ -49,3 +49,8 @@ function generarCocheras() {
 }
 
 generarCocheras();
+
+$(".cochera").click(function() {
+	var id = $(this).data("id");
+	socket.emit('reservar', { id: id });
+});

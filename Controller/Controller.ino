@@ -12,6 +12,8 @@ unsigned char BUFFER_SERVER[BUFFER_SIZE];
 unsigned char barrido_last = PLACAS_START;
 bool barrido[PLACAS]; // guarda el estado de las placas | true=libre
 
+unsigned char qid = 0, qdata = 0;
+
 void setup() {
   // Serial = Arduino y server
   Serial.begin(9600);
@@ -35,24 +37,35 @@ void placa_estado(unsigned char id, unsigned char estado) {
 // si no hay nada para hacer, se sigue con el barrido
 void bus_next() {
   // TODO hacer otras cosas
+  if(qid > 0) {
+    bus_send(qid, qdata, false);
+    qid = 0;
+    qdata = 0;
+    return;
+  }
 
   // si no hay otra cosa que mandar
   // seguimos barriendo
   barrido_last++;
   if(barrido_last >= PLACAS_START + PLACAS)
     barrido_last = PLACAS_START;
-  bus_send(barrido_last, 'e');
+  bus_send(barrido_last, 'e', true);
 }
 
 // se intenta comunicar con el modulo ID y envia data
 // solo tiene que ser llamada desde bus_next
 // esto setea last_packet_* y esperara a que el bus responda
 // antes de volver a llamar a bus_next
-void bus_send(unsigned char id, unsigned char data) {
+void bus_send(unsigned char id, unsigned char data, bool wait_for_response) {
   Serial1.write(id);
   Serial1.write(data);
-  last_packet_id = id;
-  last_packet_time = millis();
+  if(wait_for_response) {
+    last_packet_id = id;
+    last_packet_time = millis();
+  } else {
+    last_packet_id = 0;
+    last_packet_time = 0;
+  }
 }
 
 // esto se llama cuando el modulo ID envia el dato data
@@ -121,13 +134,17 @@ void sv_loop() {
     }
     BUFFER_SERVER[0] = Serial.read();
 
-    switch(BUFFER_SERVER[0]) {
-      case 199: // init
+    if(BUFFER_SERVER[0] == 199) { // init
         for(int i = 0; i < PLACAS; i++) {
           Serial.write(PLACAS_START + i);
           Serial.write((barrido[i] ? 'L' : 'O'));
         }
-      break;
+    }
+    
+    // forward
+    if(BUFFER_SERVER[1] >= PLACAS_START) {
+      qid = BUFFER_SERVER[1];
+      qdata = BUFFER_SERVER[0];
     }
   }
 }
