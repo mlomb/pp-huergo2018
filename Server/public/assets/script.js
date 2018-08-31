@@ -11,7 +11,7 @@ var socket = io();
 */
 
 socket.on('serial', function (data) {
-	$("#serial").append((data.direction == 'sended' ? '←' : '→') + " " + data.data);
+	$(".serie-rows").append('<div class="row '+(data.direction == 'sended' ? 'sale' : 'entra')+'"><i class="material-icons">arrow_'+(data.direction == 'sended' ? 'back' : 'forward')+'</i>'+data.data+'</div>');
 });
 
 socket.on('estado', function (placas_estados) {

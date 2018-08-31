@@ -15,8 +15,6 @@ Controller.onClose = function() {
 	
 }
 Controller.onDataReceived = function(data) {
-	io.emit('serial', { direction: 'received', data: data.toString('utf8') });
-	
 	for(var i = 0; i < data.length; i++) {
 		buffer.push(data[i]);
 	}
@@ -28,6 +26,7 @@ Controller.onDataReceived = function(data) {
 			var estado = buffer.shift();
 			placas_estados[id] = estado == 76;
 			console.log(id + ":" + estado);
+			io.emit('serial', { direction: 'received', data: [id, estado] });
 			io.emit('estado', placas_estados);
 		}
 	}
