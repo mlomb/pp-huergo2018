@@ -38,17 +38,17 @@
 						<div class="mdl-grid">
 							<div class="mdl-cell mdl-cell--4-col">
 								<label>ID</label>
-								<select>
+								<select id="serial-id">
 									<optgroup label="Placas">
 										<% for(var i = 200; i < 240; i++){ %>
-											<option value="<%= i %>''">#<%= i %></option>
+											<option value="<%= i %>">#<%= i %></option>
 										<% } %>
 									</optgroup>
 								</select>
 							</div>
 							<div class="mdl-cell mdl-cell--4-col">
 								<label>Dato</label>
-								<select>
+								<select id="serial-dato">
 									<optgroup label="Letras">
 										<% 
 										var l = "ern";
@@ -60,7 +60,7 @@
 								</select>
 							</div>
 							<div class="mdl-cell mdl-cell--4-col">
-									<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Enviar</button>
+									<button id="serial-send" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Enviar</button>
 							</div>
 						</div>
 					</div>

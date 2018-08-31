@@ -52,5 +52,8 @@ generarCocheras();
 
 $(".cochera").click(function() {
 	var id = $(this).data("id");
-	socket.emit('reservar', { id: id });
+	
+});
+$("#serial-send").click(function() {
+	socket.emit('serial', { id: $("#serial-id").val(), dato: $("#serial-dato").val()});
 });
