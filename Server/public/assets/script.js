@@ -12,6 +12,7 @@ var socket = io();
 
 socket.on('serial', function (data) {
 	$(".serie-rows").append('<div class="row '+(data.direction == 'sended' ? 'sale' : 'entra')+'"><i class="material-icons">arrow_'+(data.direction == 'sended' ? 'back' : 'forward')+'</i>'+data.data+'</div>');
+	$("#serial_information").stop().animate({ scrollTop: $('#serial_information').prop("scrollHeight")}, 400);
 });
 
 socket.on('estado', function (placas_estados) {
