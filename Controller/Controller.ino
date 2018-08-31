@@ -12,6 +12,7 @@ unsigned char BUFFER_SERVER[BUFFER_SIZE];
 unsigned char barrido_last = PLACAS_START;
 bool barrido[PLACAS]; // guarda el estado de las placas | true=libre
 
+bool barrer = true;
 unsigned char qid = 0, qdata = 0;
 
 void setup() {
@@ -38,18 +39,21 @@ void placa_estado(unsigned char id, unsigned char estado) {
 void bus_next() {
   // TODO hacer otras cosas
   if(qid > 0) {
-    bus_send(qid, qdata, false);
+    bus_send(qid, qdata, true);
     qid = 0;
     qdata = 0;
+    delay(BUS_TIMEOUT);
     return;
   }
 
-  // si no hay otra cosa que mandar
-  // seguimos barriendo
-  barrido_last++;
-  if(barrido_last >= PLACAS_START + PLACAS)
-    barrido_last = PLACAS_START;
-  bus_send(barrido_last, 'e', true);
+  if(barrer) {
+    // si no hay otra cosa que mandar
+    // seguimos barriendo
+    barrido_last++;
+    if(barrido_last >= PLACAS_START + PLACAS)
+      barrido_last = PLACAS_START;
+    bus_send(barrido_last, 'e', true);
+  }
 }
 
 // se intenta comunicar con el modulo ID y envia data
@@ -59,6 +63,7 @@ void bus_next() {
 void bus_send(unsigned char id, unsigned char data, bool wait_for_response) {
   Serial1.write(id);
   Serial1.write(data);
+  
   if(wait_for_response) {
     last_packet_id = id;
     last_packet_time = millis();
@@ -139,6 +144,8 @@ void sv_loop() {
           Serial.write(PLACAS_START + i);
           Serial.write((barrido[i] ? 'L' : 'O'));
         }
+    } else if(BUFFER_SERVER[0] == 198) { // toggle barrer
+      barrer = !barrer;
     }
     
     // forward

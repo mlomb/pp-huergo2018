@@ -31,7 +31,7 @@ Controller.onDataReceived = function(data) {
 			io.emit('estado', placas_estados);
 		}
 	}
-	//console.log("Recibido: " + data);
+	console.log("Recibido: " + data);
 }
 Controller.onDataSend = function(data) {
 	io.emit('serial', { direction: 'sended', data: data.toString('utf8') });
@@ -47,9 +47,8 @@ io.on('connection', function (socket) {
 	// un usuario se conecto por WebSockets
 	io.emit('estado', placas_estados);
 
-	socket.on('reservar', function (data) {
-		//console.log(data.id);
-		Controller.send([data.id, 114]);
+	socket.on('serial', function (data) {
+		Controller.send([parseInt(data.id), parseInt(data.dato)]);
 	});
 });
 
