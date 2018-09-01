@@ -12,6 +12,8 @@ var socket = io();
 
 socket.on('serial', function (data) {
 	$(".serie-rows").append('<div class="row '+(data.direction == 'sended' ? 'sale' : 'entra')+'"><i class="material-icons">arrow_'+(data.direction == 'sended' ? 'back' : 'forward')+'</i>'+data.data+'</div>');
+	if($(".serie-rows .row").length > 200)
+		$(".serie-rows .row").slice(0, 1).remove();
 	$("#serial_information").stop().animate({ scrollTop: $('#serial_information').prop("scrollHeight")}, 400);
 });
 
