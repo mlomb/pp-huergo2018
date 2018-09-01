@@ -1,17 +1,17 @@
 <% include layouts/header.ejs %>
     <div class="content">
         <div class="login-box">
-            <form action="" method="POST">
+            <form action="login" method="POST">
                 <div>
                     <i class="fas fa-user"></i>
                     <label for="user">Usuario</label>
                 </div>
-                <input type="text" id="user">
+                <input type="text" id="user" name="user">
                 <div>
                     <i class="fas fa-key"></i>
                     <label for="pass">Contraseña</label>
                 </div>
-                <input type="password" id="pass">
+                <input type="password" id="pass" name="pass">
                 <button type="submit">Ingresar</button>
             </form>
         </div>
@@ -62,6 +62,12 @@
         }
         .login-box > form > input:focus{
             outline: none;
+        }
+        .login-box > form > input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 30px black inset;
+        }
+        .login-box > form > input:-webkit-autofill {
+            -webkit-text-fill-color: white !important;
         }
     </style>
 <% include layouts/footer.ejs %>
