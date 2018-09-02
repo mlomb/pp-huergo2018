@@ -37,13 +37,25 @@ app.post('/login', function(req,res){
     }, function (error, results, fields) {
         if (error) throw error;
         if (results !== undefined && results.length > 0){
-            res.send(results + " <br> Todo ok wacho -> " + req.session.id + " | ID : " + fields[0].id);
-            //INICIA LA SESSION CAPO
+            req.session.user = results[0].id;
+            res.writeHead(301,
+                {Location: '/'}
+              );
+            res.end();
         }else{
-            res.send("Error capo");
-            //TIRAR EL MENSAJITO DE ERROR (Y UN PASO)
+            res.writeHead(301,
+                {Location: '/login'}
+              );
+            res.end();
         }
     });
+});
+app.get('/logout', function(req,res){
+    req.session.destroy();
+    res.writeHead(301,
+        {Location: '/'}
+      );
+    res.end();
 });
 
 app.listen(8080, function(){
