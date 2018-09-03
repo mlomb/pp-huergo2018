@@ -1,61 +1,70 @@
 const express = require('express');
 const path = require('path');
-const mysql = require('mysql');
 const bodyParser = require('body-parser');
-const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const admin = require('firebase-admin');
+
+var serviceAccount = require('./tutu-parking-firebase-adminsdk.json');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
 
 const app = express();
 
 //PARSER PARA POST
-app.use( bodyParser.json() );
+app.use(cookieParser());
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 //TEMPLATE ENGINE
 app.use("/public", express.static(path.join(__dirname, 'public')));
 app.set('view engine','ejs');
-//SESSION (PARA QUE CARAJO ES EL SECRETO?)
-app.use(session({secret: "Shh, its a secret!"})); 
 
 //ROUTING
 app.get('/', function(req,res){
-    res.render('index');
+    const sessionCookie = req.cookies.session || '';
+    admin.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
+        res.render('index', { user: decodedClaims });
+    }).catch(error => {
+        res.render('index', { user: null });
+    });
 });
 app.get('/login', function(req,res){
     res.render('login');
 });
-app.post('/login', function(req,res){
-    var con = mysql.createConnection({
-        host: "nyvaweb.com",
-        user: "nyvaespo_tutu",
-        password: "supertutuparking",
-        database: "nyvaespo_tutu"
-    });
 
-    con.query({
-        sql: 'SELECT * FROM users WHERE usuario = ? AND password = ?',
-        timeout: 4000, // 4s
-        values: [req.body.user,req.body.pass]
-    }, function (error, results, fields) {
-        if (error) throw error;
-        if (results !== undefined && results.length > 0){
-            req.session.user = results[0].id;
-            res.writeHead(301,
-                {Location: '/'}
-              );
-            res.end();
-        }else{
-            res.writeHead(301,
-                {Location: '/login'}
-              );
-            res.end();
-        }
-    });
-});
 app.get('/logout', function(req,res){
-    req.session.destroy();
+    admin.auth().signOut();
+        
     res.writeHead(301,
         {Location: '/'}
       );
     res.end();
+});
+
+app.post('/api/login', function(req,res){
+    var idToken = req.body.token;
+
+    if(idToken.length == 0) {
+        res.clearCookie('session');
+        res.end();
+    } else {
+        admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
+            var uid = decodedToken.uid;
+            console.log("Se logueo bien: " + uid);
+            
+            const expiresIn = 60 * 60 * 24 * 5 * 1000;
+            admin.auth().createSessionCookie(idToken, {expiresIn}).then((sessionCookie) => {
+                const options = {maxAge: expiresIn, httpOnly: true, secure: false};
+                res.cookie('session', sessionCookie, options);
+                res.end(JSON.stringify({status: 'success'}));
+            }, error => {;
+                res.end();
+            });
+        }).catch(function(error) {
+            res.end();
+        });
+    }
 });
 
 app.listen(8080, function(){

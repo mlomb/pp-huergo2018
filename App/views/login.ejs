@@ -15,7 +15,59 @@
                 <button type="submit">Ingresar</button>
             </form>
         </div>
+        <button id="lomb">Boton de mierda</button>
+        <button id="sign-out">Log out</button>
+        <button id="sign-in">Register</button>
     </div>
+    <script src="https://www.gstatic.com/firebasejs/5.3.1/firebase.js"></script>
+    <script>
+        var config = {
+            apiKey: "AIzaSyBOzmaikD_lrox31O50TRCtRRz9hdr2ExY",
+            authDomain: "tutu-parking.firebaseapp.com",
+            projectId: "tutu-parking"
+        };
+        firebase.initializeApp(config);
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
+                    requestSession(idToken);
+                });
+            } else {
+                requestSession(null);
+            }
+        });
+
+        function doLogin(provider) {
+            firebase.auth().signInWithPopup(provider);
+        }
+        
+        $("#lomb").click(function() {
+            doLogin(new firebase.auth.GoogleAuthProvider());
+        });
+
+        $("#sign-out").click(function() {
+            firebase.auth().signOut();
+        });
+
+        $("#sign-in").click(function() {
+            firebase.auth().createUserWithEmailAndPassword($("#user").val(), $("#pass").val());
+        });
+
+        function requestSession(newToken) {
+            $.ajax({
+                url: '/api/login/',
+                method: 'POST',
+                dataType: 'json',
+                data: { token: newToken }
+            }).then(function(data) {
+                processSession(data);
+            });
+        }
+
+        function processSession(user) {
+            console.log(user);
+        }
+    </script>
     <style>
         .content{
             padding: 130px;
