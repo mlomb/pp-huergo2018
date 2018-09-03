@@ -22,7 +22,15 @@
             <a href="/"><img src="../public/images/Logos/logo2.png" alt=""></a>
             <h1> TUTU PARKING</h1>
             <ul class="nav">
-                <li><img src="../public/images/Logos/user.png" alt=""><a href="login">Mi Cuenta</a></li>
+                <%if (JSON.stringify(user) == "null") { %>
+                    <a href="login">LogIn</a>
+                    <a href="register">Register</a>
+                <% }else{ %>
+                    <%= user %>
+                    <a href="profile">Perfil</a>
+                    <a href="logout">LogOut</a>
+                <% } %>
             </ul>
         </div>
     </div>
+    

@@ -1,21 +1,20 @@
 <% include layouts/header.ejs %>
     <div class="content">
         <div class="login-box">
-            <form action="login" method="POST">
+            <form action="" method="POST">
                 <div>
                     <i class="fas fa-user"></i>
                     <label for="user">EMail</label>
                 </div>
-                <input type="text" id="user" name="email">
+                <input type="text" id="email" name="email">
                 <div>
                     <i class="fas fa-key"></i>
                     <label for="pass">Contraseña</label>
                 </div>
                 <input type="password" id="pass" name="pass">
-                <button type="submit">Ingresar</button>
+                <button type="submit" id="register">Registrarse</button>
             </form>
         </div>
-        <button id="lomb">Boton de mierda</button>
     </div>
     <script src="https://www.gstatic.com/firebasejs/5.3.1/firebase.js"></script>
     <script>
@@ -25,34 +24,10 @@
             projectId: "tutu-parking"
         };
         firebase.initializeApp(config);
-        /*
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-                firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
-                    requestSession(idToken);
-                });
-            } else {
-                requestSession(null);
-            }
-        });
-        */
-        function doLogin(provider) {
-            firebase.auth().signInWithPopup(provider);
-        }
-        
-        $("#lomb").click(function() {
-            doLogin(new firebase.auth.GoogleAuthProvider());
-            firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
-                $.ajax({
-                    url: '/api/login/',
-                    method: 'POST',
-                    dataType: 'json',
-                    data: { token: idToken }
-                }).then(function(data) {
-                    window.location = "index";
-                });
-            });
-            
+        $("#register").click(function(e) {
+            e.preventDefault();
+            firebase.auth().createUserWithEmailAndPassword($("#email").val(), $("#pass").val());
+            window.location = "login";
         });
     </script>
     <style>
