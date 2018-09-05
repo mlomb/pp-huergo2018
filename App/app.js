@@ -10,6 +10,7 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 
+const admin_auth = admin.auth();
 const app = express();
 
 //PARSER PARA POST
@@ -20,41 +21,42 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use("/public", express.static(path.join(__dirname, 'public')));
 app.set('view engine','ejs');
 
-
-//ROUTING
-app.get('/', function(req,res){
+function checkLogin(req, pred) {
     const sessionCookie = req.cookies.session || "";
-    admin.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
-        res.render('index', { user: decodedClaims });
+    admin_auth.verifySessionCookie(sessionCookie, false).then((decodedClaims) => {
+        
+        pred(true, {
+            user_id: decodedClaims.user_id,
+            name: decodedClaims.name,
+            picture: decodedClaims.picture
+        });
     }).catch(error => {
-        res.render('index', { user: null });
+        console.log("Error verifying cookie: " + error);
+        pred(false, null);
+    });
+}
+
+app.get('/', function(req,res){
+    checkLogin(req, function(login, user) {
+        res.render('index', { user: user });
     });
 });
 
 app.get('/login', function(req,res){
-    const sessionCookie = req.cookies.session || "";
-    admin.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
-        res.header(302, 
-            {'Location': 'profile'}
-        );
-    }).catch(error => {
-        res.render('login', { user: null });
+    checkLogin(req, function(login, user) {
+        if(!login) {
+            res.render('login', { login: false, user: null });
+        } else {
+            res.redirect('/');
+            res.end();
+        }
     });
-});
-
-app.get('/register', function(req,res){
-    const sessionCookie = req.cookies.session || "";
-    admin.auth().verifySessionCookie(sessionCookie, true).then((decodedClaims) => {
-        res.header(302, 
-            {'Location': 'profile'}
-        );
-    }).catch(error => {
-        res.render('register', { user: null });
-    });
+    res.render('login', { user: null });
 });
 
 app.get('/logout', function(req,res){
     res.clearCookie('session');
+    console.log("Cookie destruida");
     res.writeHead(302, 
         {'Location': '/'}
     );
@@ -71,9 +73,9 @@ app.post('/api/login', function(req,res){
         admin.auth().createSessionCookie(idToken, {expiresIn}).then((sessionCookie) => {
             const options = {maxAge: expiresIn, httpOnly: true, secure: false};
             res.cookie('session', sessionCookie, options);
-            console.log("Cookie creada = " + uid);
+            console.log("Usuario inició sesión: " + uid);
             res.end();
-        }, error => {;
+        }).catch(function(error) {
             res.end();
         });
     }).catch(function(error) {

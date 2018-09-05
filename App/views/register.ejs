@@ -12,7 +12,7 @@
                     <label for="pass">Contraseña</label>
                 </div>
                 <input type="password" id="pass" name="pass">
-                <button type="submit" id="register">Registrarse</button>
+                <button type="button" id="register">Registrarse</button>
             </form>
         </div>
     </div>
@@ -24,11 +24,7 @@
             projectId: "tutu-parking"
         };
         firebase.initializeApp(config);
-        $("#register").click(function(e) {
-            e.preventDefault();
-            firebase.auth().createUserWithEmailAndPassword($("#email").val(), $("#pass").val());
-            window.location = "login";
-        });
+
     </script>
     <style>
         .content{

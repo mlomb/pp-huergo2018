@@ -13,24 +13,41 @@
     <link rel="stylesheet" type="text/css" href="../public/datepicker/dist/mtr-datepicker.min.css">
     <script type="text/javascript" src="../public/datepicker/dist/mtr-datepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../public/datepicker/dist/mtr-datepicker.default-theme.min.css">
+    <!-- Material Design -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <!-- Main -->
     <link rel="stylesheet" href="../public/css/styles.css">
 </head>
 <body>
-    <div class="header">
-        <div class="container">
-            <a href="/"><img src="../public/images/Logos/logo2.png" alt=""></a>
-            <h1> TUTU PARKING</h1>
-            <ul class="nav">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+          <div class="mdl-layout__header-row">
+            <a href="/"><img id="menuLogo" src="../public/images/Logos/logo2.png" alt="Logo Tutu Parking"></a> 
+            <div class="mdl-layout-spacer"></div>
+            <nav class="mdl-navigation mdl-layout--large-screen-only">
                 <%if (JSON.stringify(user) == "null") { %>
-                    <a href="login">LogIn</a>
-                    <a href="register">Register</a>
+                    <a class="mdl-navigation__link" href="login">LogIn</a>
+                    <a class="mdl-navigation__link" href="register">Register</a>
                 <% }else{ %>
-                    <%= user %>
-                    <a href="profile">Perfil</a>
-                    <a href="logout">LogOut</a>
+                    <a class="mdl-navigation__link" href="profile">Perfil</a>
+                    <a class="mdl-navigation__link" href="logout">LogOut</a>
                 <% } %>
-            </ul>
+            </nav>
+          </div>
+        </header>
+        <div class="mdl-layout__drawer" style="display:none;">
+          <nav class="mdl-navigation">
+            <%if (JSON.stringify(user) == "null") { %>
+                <a class="mdl-navigation__link" href="login">LogIn</a>
+                <a class="mdl-navigation__link" href="register">Register</a>
+            <% }else{ %>
+                <a class="mdl-navigation__link" href="profile">Perfil</a>
+                <a class="mdl-navigation__link" href="logout">LogOut</a>
+            <% } %>
+          </nav>
         </div>
-    </div>
+        <main class="mdl-layout__content">
+          <div class="page-content">
     

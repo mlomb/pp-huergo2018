@@ -9,6 +9,7 @@ body{
 	overflow-x:hidden;
     text-align: center;
 }
+/*
 .content{
     width:100vw;
     height: auto;
@@ -73,13 +74,23 @@ body{
     display: none;
 }
 
-.header a{
-    
-}
-
 .header a img{
     height: 40px;
     margin-top: 5px;
+}
+*/
+
+header .material-icons {
+    margin-top: 12px;
+}
+.mdl-layout--fixed-header>.mdl-layout__header{
+    background-color: #000000;
+}
+.mdl-layout--fixed-header>.mdl-layout__header #menuLogo{
+    height: 44px;
+}
+header .mdl-layout__drawer-button{
+    display: none;
 }
 
 /*---------------------------
@@ -93,6 +104,7 @@ body{
     width: 100%;
     height: auto;
     text-align: center;
+    background-color: #F1F1F1;
 }
 .content-body{
     padding-top: 50px;
@@ -252,6 +264,77 @@ body{
     position: static;
 }
 
+/*-------------
+    LOGIN
+--------------*/
+
+.login-box{
+    width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: black;
+    padding: 40px 60px;
+    border-radius: 20px;
+}
+.login-box > form > * {
+    display: block;
+    margin: 15px auto;
+    width: 100%;
+}
+.login-box > form > div{
+    text-align: left;
+}
+
+.login-box > form > div:first-of-type{
+    margin-top: 0px;
+}
+
+.login-box > form > div > label , .login-box > form > div > i{
+    color: white;
+    font-size: 17px;
+    margin-right: 7px;
+}
+
+.login-box > form > button {
+    margin-top: 30px;
+    margin-bottom: 0px;
+    background-color: white;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 7px;
+    font-weight: bold;
+    height: 36px;
+}
+
+.login-box > form > #google-login{
+    margin-top:20px;
+    background-color: #DB4437;
+    color: white;
+    font-weight: 400;
+}
+
+.login-box > form > #google-login > i{
+    margin-right: 5px;
+}
+
+.login-box > form > input {
+    background-color: transparent;
+    border: 0;
+    padding: 5px;
+    border-bottom: 2px solid white;
+    color: white;
+}
+.login-box > form > input:focus{
+    outline: none;
+}
+.login-box > form > input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px black inset;
+}
+.login-box > form > input:-webkit-autofill {
+    -webkit-text-fill-color: white !important;
+}
+
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
@@ -271,6 +354,12 @@ body{
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
     
+} 
+
+@media only screen and (max-width: 1024px) {
+    header .mdl-layout__drawer{
+        display: inherit;
+    }
 } 
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
