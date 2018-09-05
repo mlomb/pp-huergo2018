@@ -9,6 +9,9 @@ body{
 	overflow-x:hidden;
     text-align: center;
 }
+p {
+    margin: 0;
+}
 /*
 .content{
     width:100vw;
@@ -311,15 +314,48 @@ header .mdl-layout__drawer-button{
     height: 36px;
 }
 
-.login-box > form > #google-login{
-    margin-top:20px;
+.login-box > form > .socialContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.login-box > form > .socialContainer > button{
+    height: 42px;
+    width: 42px;
+    border-radius: 5px;
+    border: 0;
+    margin-top: 10px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.login-box > form > .socialContainer > button > i{
+    font-size: 20px;
+}
+
+.login-box > form > .socialContainer > #google-login{
     background-color: #DB4437;
     color: white;
     font-weight: 400;
 }
 
-.login-box > form > #google-login > i{
-    margin-right: 5px;
+.login-box > form > .socialContainer > #facebook-login{
+    background-color: #29487d;
+    color: white;
+    font-weight: 400;
+}
+
+.login-box > form > .socialContainer > #twitter-login{
+    background-color: #08a0e9;
+    color: white;
+    font-weight: 400;
+}
+
+.login-box > form > .socialContainer > #github-login{
+    background-color: #313030;
+    color: white;
+    font-weight: 400;
 }
 
 .login-box > form > input {

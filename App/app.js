@@ -18,7 +18,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 //TEMPLATE ENGINE
-app.use("/public", express.static(path.join(__dirname, 'public')));
+app.use("/", express.static(path.join(__dirname, 'public')));
 app.set('view engine','ejs');
 
 function checkLogin(req, pred) {
@@ -27,6 +27,12 @@ function checkLogin(req, pred) {
         user: null
     };
     const sessionCookie = req.cookies.session || "";
+
+    if(sessionCookie.length == 0) {
+        pred(data);
+        return;
+    }
+
     admin_auth.verifySessionCookie(sessionCookie, false).then((decodedClaims) => {
         
         data.login = true;
@@ -58,13 +64,9 @@ app.get('/login', function(req,res){
     });
 });
 
-app.get('/logout', function(req,res){
+app.get('/api/logout', function(req,res){
     res.clearCookie('session');
-    console.log("Cookie destruida");
-    res.writeHead(302, 
-        {'Location': '/'}
-    );
-    res.end();
+    res.redirect('/');
 });
 
 app.post('/api/login', function(req,res){
@@ -78,12 +80,12 @@ app.post('/api/login', function(req,res){
             const options = {maxAge: expiresIn, httpOnly: true, secure: false};
             res.cookie('session', sessionCookie, options);
             console.log("Usuario inició sesión: " + uid);
-            res.end();
+            res.end(JSON.stringify({ success: true }));
         }).catch(function(error) {
-            res.end();
+            res.end(JSON.stringify({ success: false }));
         });
     }).catch(function(error) {
-        res.end();
+        res.end(JSON.stringify({ success: false }));
     });
 });
 

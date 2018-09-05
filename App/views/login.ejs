@@ -13,35 +13,42 @@
                 </div>
                 <input type="password" id="pass" name="pass">
                 <button type="submit">Ingresar</button>
-                <button type="button" id="google-login">
-                    <i class="fab fa-google" style="display:inline;"></i>
-                    <p style="display:inline;">Iniciar sesión con <b>Google</b></p>
-                </button>
+                <div class="socialContainer">
+                    <button type="button" id="google-login">
+                        <i class="fab fa-google"></i>
+                    </button>
+                    <button type="button" id="facebook-login">
+                        <i class="fab fa-facebook"></i>
+                    </button>
+                    <button type="button" id="twitter-login">
+                        <i class="fab fa-twitter"></i>
+                    </button>
+                    <button type="button" id="github-login">
+                        <i class="fab fa-github"></i>
+                    </button>
+                </div>
             </form>
         </div>
     </div>
-    <script src="https://www.gstatic.com/firebasejs/5.3.1/firebase.js"></script>
     <script>
-        var config = {
-            apiKey: "AIzaSyBOzmaikD_lrox31O50TRCtRRz9hdr2ExY",
-            authDomain: "tutu-parking.firebaseapp.com",
-            projectId: "tutu-parking"
-        };
-        firebase.initializeApp(config);
-        
         function requestSession(idToken) {
-            firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
-                $.ajax({
-                    url: '/api/login/',
-                    method: 'POST',
-                    dataType: 'json',
-                    data: { token: idToken }
-                }).then(function(data) {
-                    window.location = "index";
+            if(firebase.auth().currentUser) {
+                firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
+                    console.log("Login...");
+                    $.ajax({
+                        url: '/api/login/',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: { token: idToken },
+                        success: function() {
+                            console.log("HOLA PUTOS");
+                            window.location = "/";
+                        }
+                    });
                 });
-            });
+            }
         }
-
+        
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
                 firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
@@ -51,10 +58,6 @@
                 requestSession(null);
             }
         });
-        
-        function doLogin(provider) {
-            firebase.auth().signInWithPopup(provider);
-        }
         
         $("#google-login").click(function() {
             doLogin(new firebase.auth.GoogleAuthProvider());
@@ -67,7 +70,7 @@
     <style>
         .content{
             padding: 100px;
-            background-image: url('../public/images/backLogIn.png');
+            background-image: url('/images/backLogIn.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat; 
