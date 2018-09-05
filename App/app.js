@@ -11,7 +11,18 @@ admin.initializeApp({
   credential: admin.credential.cert(datos.firebase)
 });
 
-var con = mysql.createConnection(datos.database);
+var con = mysql.createPool(datos.database);
+
+function doQuery(query, params, callback) {
+    pool.getConnection(function(err, connection) {
+        if(err) throw err;
+        connection.query(query, params, function(err, results) {
+            connection.release();
+            if(err) throw err;
+            callback(results);
+        });
+    });
+}
 
 const admin_auth = admin.auth();
 const app = express();
@@ -82,8 +93,7 @@ app.post('/api/login', function(req,res){
         admin.auth().createSessionCookie(idToken, {expiresIn}).then((sessionCookie) => {
             const options = {maxAge: expiresIn, httpOnly: true, secure: false};
             res.cookie('session', sessionCookie, options);
-            con.query("INSERT IGNORE INTO users (id) VALUES (?)", [uid] , function (err, result) {
-                if (err) throw err;
+            doQuery("INSERT IGNORE INTO users (id) VALUES (?)", [uid] , function (result) {
                 console.log("Usuario inició sesión: " + uid);
                 res.end(JSON.stringify({ success: true }));
             });
