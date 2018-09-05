@@ -1,33 +1,29 @@
 <% include layouts/header.ejs %>
 
 <%= JSON.stringify(user) %>
-    <div class="content fisrt">
-        <h1>Reservá tu cochera</h1>
-        <h2>Pasos</h2>
-        <div class="pbar-container">
-            <ul class="progressbar">
-                <li class="progressItem active">Paso 1</li>
-                <li class="progressItem">Paso 2</li>
-                <li class="progressItem">Paso 3</li>
-            </ul>   
-        </div>
-        
-        <div class="content-body">
-            <div class="details">
-                <div class="details-row">
-                    <div><i class="fas fa-info-circle"></i></div>
-                    <p>Detalles: </p>
-                    <p>Dia/Mes/Año Hora</p>
-                </div>
-                <div class="details-row">
-                    <div><i class="fas fa-car"></i></div>
-                    <p>Estacionamiento: </p>
-                    <p>J-16</p>
-                </div>
+    <h1>Reservá tu cochera</h1>
+    <h2>Pasos</h2>
+    <div class="pbar-container">
+        <ul class="progressbar">
+            <li class="progressItem active">Paso 1</li>
+            <li class="progressItem">Paso 2</li>
+            <li class="progressItem">Paso 3</li>
+        </ul>   
+    </div>
+    
+    <div class="content-body">
+        <div class="details">
+            <div class="details-row">
+                <div><i class="fas fa-info-circle"></i></div>
+                <p>Detalles: </p>
+                <p>Dia/Mes/Año Hora</p>
+            </div>
+            <div class="details-row">
+                <div><i class="fas fa-car"></i></div>
+                <p>Estacionamiento: </p>
+                <p>J-16</p>
             </div>
         </div>
-        
-        
     </div>
     <script>
         $(document).on("click",".progressItem", function(){

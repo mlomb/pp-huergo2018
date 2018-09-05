@@ -3,12 +3,15 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const admin = require('firebase-admin');
+const mysql = require('mysql');
 
-var datos = require('./datos.json');
+var datos = require('./../datos.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(datos.firebase)
 });
+
+var con = mysql.createConnection(datos.database);
 
 const admin_auth = admin.auth();
 const app = express();
@@ -79,8 +82,11 @@ app.post('/api/login', function(req,res){
         admin.auth().createSessionCookie(idToken, {expiresIn}).then((sessionCookie) => {
             const options = {maxAge: expiresIn, httpOnly: true, secure: false};
             res.cookie('session', sessionCookie, options);
-            console.log("Usuario inició sesión: " + uid);
-            res.end(JSON.stringify({ success: true }));
+            con.query("INSERT IGNORE INTO users (id) VALUES (?)", [uid] , function (err, result) {
+                if (err) throw err;
+                console.log("Usuario inició sesión: " + uid);
+                res.end(JSON.stringify({ success: true }));
+            });
         }).catch(function(error) {
             res.end(JSON.stringify({ success: false }));
         });

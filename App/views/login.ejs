@@ -1,34 +1,32 @@
 <% include layouts/header.ejs %>
-    <div class="content">
-        <div class="login-box">
-            <form action="login" method="POST">
-                <div>
-                    <i class="fas fa-user"></i>
-                    <label for="user">EMail</label>
-                </div>
-                <input type="text" id="user" name="email">
-                <div>
-                    <i class="fas fa-key"></i>
-                    <label for="pass">Contraseña</label>
-                </div>
-                <input type="password" id="pass" name="pass">
-                <button type="submit">Ingresar</button>
-                <div class="socialContainer">
-                    <button type="button" id="google-login">
-                        <i class="fab fa-google"></i>
-                    </button>
-                    <button type="button" id="facebook-login">
-                        <i class="fab fa-facebook"></i>
-                    </button>
-                    <button type="button" id="twitter-login">
-                        <i class="fab fa-twitter"></i>
-                    </button>
-                    <button type="button" id="github-login">
-                        <i class="fab fa-github"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
+    <div class="login-box">
+        <form action="login" method="POST">
+            <div>
+                <i class="fas fa-user"></i>
+                <label for="user">EMail</label>
+            </div>
+            <input type="text" id="user" name="email">
+            <div>
+                <i class="fas fa-key"></i>
+                <label for="pass">Contraseña</label>
+            </div>
+            <input type="password" id="pass" name="pass">
+            <button type="submit">Ingresar</button>
+            <div class="socialContainer">
+                <button type="button" id="google-login">
+                    <i class="fab fa-google"></i>
+                </button>
+                <button type="button" id="facebook-login">
+                    <i class="fab fa-facebook"></i>
+                </button>
+                <button type="button" id="twitter-login">
+                    <i class="fab fa-twitter"></i>
+                </button>
+                <button type="button" id="github-login">
+                    <i class="fab fa-github"></i>
+                </button>
+            </div>
+        </form>
     </div>
     <script>
         function requestSession(idToken) {
@@ -41,7 +39,7 @@
                         dataType: 'json',
                         data: { token: idToken },
                         success: function() {
-                            console.log("HOLA PUTOS");
+                            console.log("Logged in!");
                             window.location = "/";
                         }
                     });
@@ -63,17 +61,31 @@
             doLogin(new firebase.auth.GoogleAuthProvider());
         });
 
+        $("#facebook-login").click(function() {
+            doLogin(new firebase.auth.FacebookAuthProvider());
+        });
+
+        $("#twitter-login").click(function() {
+            doLogin(new firebase.auth.GoogleAuthProvider());
+        });
+
+        $("#github-login").click(function() {
+            doLogin(new firebase.auth.GithubAuthProvider());
+        });
+
         $("#register").click(function() {
             firebase.auth().createUserWithEmailAndPassword($("#email").val(), $("#pass").val());
         });
     </script>
     <style>
-        .content{
-            padding: 100px;
+        .mdl-layout__content{
             background-image: url('/images/backLogIn.png');
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat; 
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center; 
         }
     </style>
 <% include layouts/footer.ejs %>

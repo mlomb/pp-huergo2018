@@ -12,6 +12,9 @@ body{
 p {
     margin: 0;
 }
+.mdl-layout__content{
+    background-color: #F1F1F1;
+}
 /*
 .content{
     width:100vw;
@@ -95,6 +98,9 @@ header .material-icons {
 .mdl-layout--fixed-header>.mdl-layout__header #menuProfile{
     height: 44px;
     border-radius: 50%;
+}
+header .mdl-navigation__link{
+    cursor: pointer;
 }
 header .mdl-layout__drawer-button{
     display: none;
