@@ -4,10 +4,10 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const admin = require('firebase-admin');
 
-var serviceAccount = require('./tutu-parking-firebase-adminsdk.json');
+var datos = require('./datos.json');
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(datos.firebase)
 });
 
 const admin_auth = admin.auth();
@@ -22,36 +22,40 @@ app.use("/public", express.static(path.join(__dirname, 'public')));
 app.set('view engine','ejs');
 
 function checkLogin(req, pred) {
+    var data = {
+        login: false,
+        user: null
+    };
     const sessionCookie = req.cookies.session || "";
     admin_auth.verifySessionCookie(sessionCookie, false).then((decodedClaims) => {
         
-        pred(true, {
+        data.login = true;
+        data.user = {
             user_id: decodedClaims.user_id,
             name: decodedClaims.name,
             picture: decodedClaims.picture
-        });
+        };
+        pred(data);
     }).catch(error => {
         console.log("Error verifying cookie: " + error);
-        pred(false, null);
+        pred(data);
     });
 }
 
 app.get('/', function(req,res){
-    checkLogin(req, function(login, user) {
-        res.render('index', { user: user });
+    checkLogin(req, function(data) {
+        res.render('index', data);
     });
 });
 
 app.get('/login', function(req,res){
-    checkLogin(req, function(login, user) {
-        if(!login) {
-            res.render('login', { login: false, user: null });
+    checkLogin(req, function(data) {
+        if(!data.login) {
+            res.render('login', data);
         } else {
             res.redirect('/');
-            res.end();
         }
     });
-    res.render('login', { user: null });
 });
 
 app.get('/logout', function(req,res){

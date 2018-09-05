@@ -27,7 +27,21 @@
             <a href="/"><img id="menuLogo" src="../public/images/Logos/logo2.png" alt="Logo Tutu Parking"></a> 
             <div class="mdl-layout-spacer"></div>
             <nav class="mdl-navigation mdl-layout--large-screen-only">
-                <%if (JSON.stringify(user) == "null") { %>
+                <%if (login == false) { %>
+                    <a class="mdl-navigation__link" href="login">LogIn</a>
+                    <a class="mdl-navigation__link" href="register">Register</a>
+                <% }else{ %>
+                    <img src="<%= user.picture %>" alt="" id="menuProfile">
+                    <a class="mdl-navigation__link" href="profile"><%= user.name %></a>
+                    <a class="mdl-navigation__link" href="logout">LogOut</a>
+                <% } %>
+            </nav>
+          </div>
+        </header>
+        <div class="mdl-layout__drawer">
+            <nav class="mdl-navigation">
+
+                <%if (login == false) { %>
                     <a class="mdl-navigation__link" href="login">LogIn</a>
                     <a class="mdl-navigation__link" href="register">Register</a>
                 <% }else{ %>
@@ -35,18 +49,6 @@
                     <a class="mdl-navigation__link" href="logout">LogOut</a>
                 <% } %>
             </nav>
-          </div>
-        </header>
-        <div class="mdl-layout__drawer" style="display:none;">
-          <nav class="mdl-navigation">
-            <%if (JSON.stringify(user) == "null") { %>
-                <a class="mdl-navigation__link" href="login">LogIn</a>
-                <a class="mdl-navigation__link" href="register">Register</a>
-            <% }else{ %>
-                <a class="mdl-navigation__link" href="profile">Perfil</a>
-                <a class="mdl-navigation__link" href="logout">LogOut</a>
-            <% } %>
-          </nav>
         </div>
         <main class="mdl-layout__content">
           <div class="page-content">

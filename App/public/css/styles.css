@@ -89,6 +89,10 @@ header .material-icons {
 .mdl-layout--fixed-header>.mdl-layout__header #menuLogo{
     height: 44px;
 }
+.mdl-layout--fixed-header>.mdl-layout__header #menuProfile{
+    height: 44px;
+    border-radius: 50%;
+}
 header .mdl-layout__drawer-button{
     display: none;
 }
@@ -357,8 +361,8 @@ header .mdl-layout__drawer-button{
 } 
 
 @media only screen and (max-width: 1024px) {
-    header .mdl-layout__drawer{
-        display: inherit;
+    header .mdl-layout__drawer-button{
+        display: block;
     }
 } 
 
