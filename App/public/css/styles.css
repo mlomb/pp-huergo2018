@@ -85,7 +85,10 @@ p {
     margin-top: 5px;
 }
 */
-
+.carousel-image{
+    width: 100vw;
+    height: 600px;
+}
 header .material-icons {
     margin-top: 12px;
 }
