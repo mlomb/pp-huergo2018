@@ -25,6 +25,15 @@
             </div>
         </div>
     </div>
+
+    <input type="text" id="timepicker" name="timepicker" class="timepicker">
+
+    <script type="text/javascript">
+        $('.timepicker').wickedpicker({now: '12:00', twentyFour: false, title:
+                'Elija el horario de la reserva', showSeconds: true});
+    //    $('.timepicker-24').wickedpicker({twentyFour: true});
+    </script>
+
     <script>
         $(document).on("click",".progressItem", function(){
             $(this).addClass("active");
