@@ -9,7 +9,7 @@ var buffer = [];
 var placas_estados = {};
 
 Controller.onConnect = function() {
-	Controller.send([0]);
+	Controller.send([199]);
 }
 Controller.onClose = function() {
 	
@@ -33,7 +33,7 @@ Controller.onDataReceived = function(data) {
 	console.log("Recibido: " + data);
 }
 Controller.onDataSend = function(data) {
-	io.emit('serial', { direction: 'sended', data: data.toString('utf8') });
+	io.emit('serial', { direction: 'sended', data: data });
 	
 	console.log("Enviado: " + data);
 }
