@@ -8,7 +8,7 @@ var Controller = require('./controller.js');
 var buffer = [];
 var placas_estados = {};
 var displays = {
-	150: "HOLA A TODOS"
+	150: " hola aaa"
 };
 
 function syncThings() {
@@ -66,9 +66,15 @@ app.engine('html', require('ejs').renderFile);
 io.on('connection', function (socket) {
 	// un usuario se conecto por WebSockets
 	io.emit('estado', placas_estados);
+	io.emit('displays', displays);
 
 	socket.on('serial', function (data) {
 		Controller.send([parseInt(data.id), parseInt(data.dato)]);
+	});
+	socket.on('update_display', function (data) {
+		console.log("Updated display text ID: " + data.id + ", Text: " + data.text)
+		displays[data.id].text = data.text;
+		syncThings();
 	});
 });
 

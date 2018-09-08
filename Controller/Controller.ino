@@ -16,19 +16,32 @@ bool barrido[PLACAS]; // guarda el estado de las placas | true=libre
 bool barrer = true;
 unsigned char qid = 0, qdata = 0;
 
+/*--------------  DISPLAYS -------------- */
 struct Display {
   unsigned char id;
+  int length;
+  int write_pointer;
   char* text;
-  bool written = false;
+  bool written;
 };
+
+void initDisplay(unsigned char id, int length, Display& d) {
+  d.id = id;
+  d.length = length;
+  d.text = new char[length];
+  d.write_pointer = 0;
+  d.written = false;
+}
 
 #define NUM_DISPLAYS 1
 Display displays[NUM_DISPLAYS];
-
+unsigned long last_displays_refresh = 0;
 
 void setup() {
-  displays[0].id = 150;
-  displays[0].text = "aaa test";
+  const char* msg1 = "abcdefghi";
+  initDisplay(150, 16, displays[0]);
+  memcpy(displays[0].text, msg1, strlen(msg1));
+  displays[0].write_pointer = strlen(msg1);
   
   // Serial = Arduino y server
   Serial.begin(9600);
@@ -63,8 +76,7 @@ void bus_next() {
   for(int i = 0; i < NUM_DISPLAYS; i++) {
     if(!displays[i].written) {
       bus_send(displays[i].id, 13, false);
-      int len = strlen(displays[i].text);
-      for(int j = 0; j < len; j++) {
+      for(int j = 0; j < displays[i].write_pointer; j++) {
         bus_send(displays[i].id, displays[i].text[j], false);
       }
       displays[i].written = true;
@@ -183,10 +195,23 @@ void sv_loop() {
     } else if(BUFFER_SERVER[0] == 198) { // toggle barrer
       barrer = !barrer;
     } else {
+      bool handled = false;
       unsigned char id = BUFFER_SERVER[1];
-      if(id == 150) {
-        
-      } else {
+      unsigned char data = BUFFER_SERVER[0];
+      
+      for(int i = 0; i < NUM_DISPLAYS; i++) {
+        if(displays[i].id == id) {
+          if(data == 13) {
+            displays[i].write_pointer = 0;
+          } else {
+            displays[i].text[displays[i].write_pointer++] = data;
+          }
+          displays[i].written = false;
+          handled = true;
+        }
+      }
+      
+      if(!handled) {
         // forward
         if(BUFFER_SERVER[1] >= 150 && qid == 0) {
           qid = BUFFER_SERVER[1];
@@ -197,7 +222,20 @@ void sv_loop() {
   }
 }
 
+void periodic() {
+  unsigned long now = millis();
+
+  if((now - last_displays_refresh) > 5000) {
+    for(int i = 0; i < NUM_DISPLAYS; i++) {
+      displays[i].written = false;
+    }
+    last_displays_refresh = now;
+  }
+  
+}
+
 void loop() {
+  periodic();
   sv_loop();
   bus_loop();
 }

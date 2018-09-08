@@ -23,6 +23,27 @@ socket.on('estado', function (placas_estados) {
 	}
 });
 
+socket.on('displays', function (displays) {
+	$("#displays-container").html("");
+	for(var display_id in	 displays) {
+		$("#displays-container").append(`
+			<div data-id="` + display_id + `">
+				Display #` + display_id + `
+				<br>
+				<div class="mdl-textfield mdl-js-textfield">
+					<input class="mdl-textfield__input" type="text" value="` + displays[display_id] + `">
+				</div>
+				<button class="display-update mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Modificar</button>
+			</div>
+		`);
+	}
+	$(".display-update").click(function() {
+		var id = $(this).parent().data("id");
+		var txt = $(this).parent().find("input").val();
+		socket.emit('update_display', { id: id, text: txt });
+	});
+});
+
 function generarCocherasLinea(x_off, y_off, start) {
 	var id = start;
 	var dist = 0;
@@ -57,6 +78,8 @@ $(".cochera").click(function() {
 	var id = $(this).data("id");
 	
 });
+
+
 $("#serial-send").click(function() {
 	socket.emit('serial', { id: $("#serial-id").val(), dato: $("#serial-dato").val()});
 });
