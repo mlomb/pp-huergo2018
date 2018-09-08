@@ -7,9 +7,26 @@ var fs      = require('fs'),
 var Controller = require('./controller.js');
 var buffer = [];
 var placas_estados = {};
+var displays = {
+	150: "HOLA A TODOS"
+};
+
+function syncThings() {
+	console.log("INIT BACK");
+	for(var id in displays) {
+		var buf = [id, 13]; // 13 es borrar display
+		for(var i in displays[id]) {
+			buf.push(id);
+			buf.push(displays[id].charCodeAt(i));
+		}
+		Controller.send(buf);
+	}
+}
 
 Controller.onConnect = function() {
-	Controller.send([199]);
+	setTimeout(function() {
+		Controller.send([0]);
+	}, 1000);
 }
 Controller.onClose = function() {
 	
@@ -17,6 +34,10 @@ Controller.onClose = function() {
 Controller.onDataReceived = function(data) {
 	for(var i = 0; i < data.length; i++) {
 		buffer.push(data[i]);
+
+		if(data[i] == 199) {
+			syncThings();
+		}
 	}
 	
 	while(buffer.length >= 2) {

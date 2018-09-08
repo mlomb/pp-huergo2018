@@ -16,7 +16,20 @@ bool barrido[PLACAS]; // guarda el estado de las placas | true=libre
 bool barrer = true;
 unsigned char qid = 0, qdata = 0;
 
+struct Display {
+  unsigned char id;
+  char* text;
+  bool written = false;
+};
+
+#define NUM_DISPLAYS 1
+Display displays[NUM_DISPLAYS];
+
+
 void setup() {
+  displays[0].id = 150;
+  displays[0].text = "aaa test";
+  
   // Serial = Arduino y server
   Serial.begin(9600);
   // Serial1 = Arduino y maqueta
@@ -45,6 +58,18 @@ void bus_next() {
     qdata = 0;
     delay(BUS_TIMEOUT);
     return;
+  }
+
+  for(int i = 0; i < NUM_DISPLAYS; i++) {
+    if(!displays[i].written) {
+      bus_send(displays[i].id, 13, false);
+      int len = strlen(displays[i].text);
+      for(int j = 0; j < len; j++) {
+        bus_send(displays[i].id, displays[i].text[j], false);
+      }
+      displays[i].written = true;
+      return;
+    }
   }
 
   if(barrer) {
@@ -149,7 +174,8 @@ void sv_loop() {
     }
     BUFFER_SERVER[0] = Serial.read();
 
-    if(BUFFER_SERVER[0] == 199) { // init
+    if(BUFFER_SERVER[0] == 0) { // init
+        Serial.write(199);
         for(int i = 0; i < PLACAS; i++) {
           Serial.write(PLACAS_START + i);
           Serial.write((barrido[i] ? 'L' : 'O'));
@@ -157,10 +183,15 @@ void sv_loop() {
     } else if(BUFFER_SERVER[0] == 198) { // toggle barrer
       barrer = !barrer;
     } else {
-      // forward
-      if(BUFFER_SERVER[1] >= 150 && qid == 0) {
-        qid = BUFFER_SERVER[1];
-        qdata = BUFFER_SERVER[0];
+      unsigned char id = BUFFER_SERVER[1];
+      if(id == 150) {
+        
+      } else {
+        // forward
+        if(BUFFER_SERVER[1] >= 150 && qid == 0) {
+          qid = BUFFER_SERVER[1];
+          qdata = BUFFER_SERVER[0];
+        }
       }
     }
   }
