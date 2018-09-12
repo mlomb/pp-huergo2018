@@ -47,6 +47,9 @@ void setup() {
   Serial.begin(9600);
   // Serial1 = Arduino y maqueta
   Serial1.begin(9600);
+
+  
+  Serial.write(199); // INIT
 }
 
 void placa_estado(unsigned char id, unsigned char estado) {
@@ -75,9 +78,14 @@ void bus_next() {
 
   for(int i = 0; i < NUM_DISPLAYS; i++) {
     if(!displays[i].written) {
+      const int display_delay = 100;
+      
       bus_send(displays[i].id, 13, false);
+      delay(display_delay);
+      
       for(int j = 0; j < displays[i].write_pointer; j++) {
         bus_send(displays[i].id, displays[i].text[j], false);
+        delay(display_delay);
       }
       displays[i].written = true;
       return;
@@ -203,11 +211,15 @@ void sv_loop() {
         if(displays[i].id == id) {
           if(data == 13) {
             displays[i].write_pointer = 0;
+            for(int j = 0; j < displays[i].length; j++) {
+              displays[i].text[j] = ' ';
+            }
           } else {
             displays[i].text[displays[i].write_pointer++] = data;
           }
           displays[i].written = false;
           handled = true;
+          break;
         }
       }
       
@@ -227,7 +239,7 @@ void periodic() {
 
   if((now - last_displays_refresh) > 5000) {
     for(int i = 0; i < NUM_DISPLAYS; i++) {
-      displays[i].written = false;
+      //displays[i].written = false;
     }
     last_displays_refresh = now;
   }
