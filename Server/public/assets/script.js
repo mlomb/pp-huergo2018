@@ -31,11 +31,12 @@ socket.on('displays', function (displays) {
 				Display #` + display_id + `
 				<br>
 				<div class="mdl-textfield mdl-js-textfield">
-					<input class="mdl-textfield__input" type="text" value="` + displays[display_id] + `">
+					<input class="mdl-textfield__input" type="text">
 				</div>
 				<button class="display-update mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Modificar</button>
 			</div>
 		`);
+		$('div[data-id="' + display_id + '"] input').val(displays[display_id]);
 	}
 	$(".display-update").click(function() {
 		var id = $(this).parent().data("id");

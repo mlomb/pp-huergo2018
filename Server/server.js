@@ -8,7 +8,7 @@ var Controller = require('./controller.js');
 var buffer = [];
 var placas_estados = {};
 var displays = {
-	150: " hola aaa"
+	"150": "huergo compu"
 };
 
 function syncThings() {
@@ -73,7 +73,7 @@ io.on('connection', function (socket) {
 	});
 	socket.on('update_display', function (data) {
 		console.log("Updated display text ID: " + data.id + ", Text: " + data.text)
-		displays[data.id].text = data.text;
+		displays[data.id+""] = data.text;
 		syncThings();
 	});
 });
