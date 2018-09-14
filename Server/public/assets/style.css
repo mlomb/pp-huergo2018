@@ -35,9 +35,11 @@
 .serie .row {
 	font-size: 18px;
 	padding: 6px;
+	word-wrap: break-word;
 }
 .serie .row i {
 	vertical-align: middle;
+	display: inline;
 }
 .serie .row.sale {
 	background: #ff7a7a5c;

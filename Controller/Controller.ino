@@ -80,7 +80,7 @@ void bus_next() {
     if(!displays[i].written) {
       const int display_delay = 100;
       
-      bus_send(displays[i].id, 13, false);
+      bus_send(displays[i].id, displays[i].write_pointer == 0 ? 10 : 13, false);
       delay(display_delay);
       
       for(int j = 0; j < displays[i].write_pointer; j++) {
@@ -193,7 +193,10 @@ void sv_loop() {
       BUFFER_SERVER[i + 1] = BUFFER_SERVER[i];
     }
     BUFFER_SERVER[0] = Serial.read();
-
+    
+    Serial.write(BUFFER_SERVER[0]);
+    Serial.write(100);
+    
     if(BUFFER_SERVER[0] == 0) { // init
         Serial.write(199);
         for(int i = 0; i < PLACAS; i++) {
@@ -214,10 +217,13 @@ void sv_loop() {
             for(int j = 0; j < displays[i].length; j++) {
               displays[i].text[j] = ' ';
             }
+            displays[i].written = false;
           } else {
-            displays[i].text[displays[i].write_pointer++] = data;
+            if(displays[i].write_pointer < displays[i].length) {
+              displays[i].text[displays[i].write_pointer++] = data;
+              displays[i].written = false;
+            }
           }
-          displays[i].written = false;
           handled = true;
           break;
         }
@@ -239,7 +245,8 @@ void periodic() {
 
   if((now - last_displays_refresh) > 5000) {
     for(int i = 0; i < NUM_DISPLAYS; i++) {
-      //displays[i].written = false;
+      displays[i].write_pointer = 0;
+      displays[i].written = false;
     }
     last_displays_refresh = now;
   }

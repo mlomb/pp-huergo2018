@@ -2,7 +2,10 @@ var fs      = require('fs'),
 	express = require('express'),
 	app     = express(),
 	server  = require('http').Server(app),
-	io      = require('socket.io')(server);
+	io      = require('socket.io')(server),
+	mysql   = require('mysql');
+
+var datos = require('./../datos.json');
 
 var Controller = require('./controller.js');
 var buffer = [];
@@ -10,6 +13,19 @@ var placas_estados = {};
 var displays = {
 	"150": "huergo compu"
 };
+
+var pool = mysql.createPool(datos.database);
+
+function syncDatabase() {
+	//for(var id in placas_estados) {
+	//	pool.query('UPDATE slots SET state=? WHERE id=?', [placas_estados[id] ? 'OCUPADO' : 'LIBRE' , id], function (error, results, fields) {
+	//		if (error) throw error;
+	//		console.log("OK");
+	//	});
+	//}
+
+	setTimeout(syncDatabase, 500);
+}
 
 function syncThings() {
 	console.log("INIT BACK");
@@ -83,6 +99,7 @@ app.get('/', function(req, res) {
 });
 
 Controller.init();
+syncDatabase();
 server.listen(8080, function() {
 	console.log("Running on http://localhost:8080");
 });
