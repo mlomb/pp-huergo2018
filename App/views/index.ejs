@@ -1,24 +1,21 @@
 <% include layouts/header.ejs %>
-
-<%= JSON.stringify(user) %>
-    <h1>Reservá tu cochera</h1>
-    <h2>Pasos</h2>
+    <h3>Reservá tu cochera!</h3>
     <div class="pbar-container">
         <ul class="progressbar">
-            <li class="progressItem active">Paso 1</li>
-            <li class="progressItem">Paso 2</li>
-            <li class="progressItem">Paso 3</li>
+            <li id="itemOne" target=".stepOne" detail=".detailsOne" class="progressItem active">Paso 1</li>
+            <li id="itemTwo" target=".stepTwo" detail=".detailsTwo" class="progressItem">Paso 2</li>
+            <li id="itemThree" target=".stepThree" detail=".detailsThree" class="progressItem">Paso 3</li>
         </ul>   
     </div>
     
     <div class="content-body">
         <div class="details">
-            <div class="details-row">
+            <div class="details-row detailsOne">
                 <div><i class="fas fa-info-circle"></i></div>
                 <p>Detalles: </p>
-                <p>Dia/Mes/Año Hora</p>
+                <p id="timeDetail">12 : 00 PM</p>
             </div>
-            <div class="details-row">
+            <div class="details-row detailsTwo">
                 <div><i class="fas fa-car"></i></div>
                 <p>Estacionamiento: </p>
                 <p>J-16</p>
@@ -26,17 +23,66 @@
         </div>
     </div>
 
-    <input type="text" id="timepicker" name="timepicker" class="timepicker">
+    <div class="stepSection stepOne">
+        <input type="text" id="timepicker" name="timepicker" class="timepicker">
+        <div class="NextContainer">
+            <button onClick="goTwo()" class="btnNext">Siguente »</button>
+        </div>
+    </div>
+    
+    <div class="stepSection stepTwo">
+        <h3>Espacio en cochera?</h3>
+        <h3>Discapacidad?</h3>
+        <div class="NextContainer">
+            <button onClick="goThree()" class="btnNext">Siguente »</button>
+        </div>
+    </div>
+    
+    <div class="stepSection stepThree">
+        <h3>Felicidades</h3>
+        <div class="NextContainer">
+            <button onClick="end()" class="btnNext">Siguente »</button>
+        </div>
+    </div>
 
     <script type="text/javascript">
-        $('.timepicker').wickedpicker({now: '12:00', twentyFour: false, title:
-                'Elija el horario de la reserva', showSeconds: true});
-    //    $('.timepicker-24').wickedpicker({twentyFour: true});
+        $('.timepicker').wickedpicker({
+            now: '12:00', 
+            twentyFour: false, 
+            title: 'Elija el horario de la reserva', 
+        });
+        $('#timepicker').change(function(){
+            $("#timeDetail").text($(this).val());
+        })
     </script>
 
     <script>
         $(document).on("click",".progressItem", function(){
+            //BARRITA
             $(this).addClass("active");
+            $(this).prevAll().addClass("active");
+            $(this).nextAll().removeClass("active");
+
+            //MOSTRAR SECCION
+            $(".stepSection").each(function(){
+                $(this).css('display','none');
+            })
+            $($(this).attr('target')).css('display','block');
+
+            //MOSTRAR DETALLES
+            $($(this).attr('detail')).prevAll().css('display','block');
+            $($(this).attr('detail')).css('display','block');
+            $($(this).attr('detail')).nextAll().css('display','none');
         })
+        function goTwo(){
+            $('#itemTwo').click();
+        }
+        function goThree(){
+            $('#itemThree').click();
+        }
+        function end(){
+            alert("Felicidades");
+        }
     </script>
+
 <% include layouts/footer.ejs %>

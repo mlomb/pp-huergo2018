@@ -206,8 +206,38 @@ header .mdl-layout__drawer-button{
     font-size: 18px;
     margin-right: 10px;
 }
-
-
+.details-row{
+    display: none;
+}
+.detailsOne{
+    display: block;
+}
+.stepSection{
+    display: none;
+}
+.stepOne{
+    display: block;
+}
+.NextContainer{
+    width: 1000px;
+    height: 100px;
+    display: inline-block;
+    margin-top: 25px;
+}
+.NextContainer .btnNext{
+    color: #FFFFFF;
+    background-color: #4CAF50;
+    border: none;
+    display: inline-block;
+    padding: 8px 16px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    cursor: pointer;
+}
+.NextContainer .btnNext:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
 @media only screen and (max-width: 1600px) {
     .pbar-container{
         width: 1000px;

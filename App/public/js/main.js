@@ -16,3 +16,4 @@ function logOut() {
         window.location = '/api/logout';
     });
 }
+
