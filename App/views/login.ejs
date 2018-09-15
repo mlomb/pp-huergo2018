@@ -1,9 +1,12 @@
 <% include layouts/header.ejs %>
+    <div id="loadingScreen">
+        <img src="/images/loading.gif" alt="Loading gif">
+    </div>
     <div class="login-box">
         <form action="login" method="POST">
             <div>
                 <i class="fas fa-user"></i>
-                <label for="user">EMail</label>
+                <label for="user">E-Mail</label>
             </div>
             <input type="text" id="user" name="email">
             <div>
@@ -33,6 +36,7 @@
             if(firebase.auth().currentUser) {
                 firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
                     console.log("Login...");
+                    $('#loadingScreen').css('display','flex');
                     $.ajax({
                         url: '/api/login/',
                         method: 'POST',

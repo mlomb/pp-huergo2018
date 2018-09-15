@@ -68,6 +68,12 @@ app.get('/', function(req,res){
     });
 });
 
+app.get('/profile', function(req,res){
+    checkLogin(req, function(data) {
+        res.render('profile', data);
+    });
+});
+
 app.get('/home', function(req,res){
     checkLogin(req, function(data) {
         res.render('home', data);
