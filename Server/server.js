@@ -17,14 +17,23 @@ var displays = {
 var pool = mysql.createPool(datos.database);
 
 function syncDatabase() {
-	//for(var id in placas_estados) {
-	//	pool.query('UPDATE slots SET state=? WHERE id=?', [placas_estados[id] ? 'OCUPADO' : 'LIBRE' , id], function (error, results, fields) {
-	//		if (error) throw error;
-	//		console.log("OK");
-	//	});
-	//}
-
-	setTimeout(syncDatabase, 500);
+	pool.query("UPDATE slots SET state='OCUPADO'", function (error, results, fields) {
+		if (error) throw error;
+		var c = Object.keys(placas_estados).length;
+		if(c == 0) {
+			setTimeout(syncDatabase, 500);
+			return;
+		}
+		for(var id in placas_estados) {
+			pool.query('UPDATE slots SET state=? WHERE id=?', [placas_estados[id] ? 'LIBRE' : 'OCUPADO' , id], function (error, results, fields) {
+				if (error) throw error;
+				c--;
+				if(c <= 0) {
+					setTimeout(syncDatabase, 500);
+				}
+			});
+		}
+	});
 }
 
 function syncThings() {

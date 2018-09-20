@@ -65,15 +65,34 @@ function generarCocherasLado(x_off, y_off, start) {
 		id += 4;
 	});
 }
-function generarCocheras() {
+function generarEstacionamiento() {
 	$(".plano").html('');
 	var start = 200;
 	generarCocherasLado(164.4,144.3, start);
 	generarCocherasLado(164.4,420.3, start + 20);
-
+	
+	var utilities = [
+		{ x: 260, y: 10, id: 160, rotate: 0 },
+		{ x: 583, y: 10, id: 161, rotate: 0 },
+		
+		{ x: 853, y: 200, id: 161, rotate: 90 },
+		{ x: 853, y: 480, id: 161, rotate: 90 },
+		
+		{ x: 260, y: 648, id: 161, rotate: 0 },
+		{ x: 583, y: 648, id: 161, rotate: 0 },
+	];
+	
+	for(var utils of utilities) {
+		$(".plano").append(`
+			<div style="left:` + utils.x + `px;top:` + utils.y + `px;` + (utils.rotate != 0 ? 'transform:rotate('+utils.rotate+'deg)' : '') + `" data-id="` + utils.id + `" class="utilities">
+				<div class="bulb on"></div>
+				<div class="fan on"></div>
+			</div>
+		`);
+	}
 }
 
-generarCocheras();
+generarEstacionamiento();
 
 $(".cochera").click(function() {
 	var id = $(this).data("id");

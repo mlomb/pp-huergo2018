@@ -45,13 +45,16 @@
 							<div class="mdl-cell mdl-cell--4-col">
 								<label>ID</label>
 								<select id="serial-id">
+									<optgroup label="Utilities">
+										<option value="160">Utilities #1</option>
+									</optgroup>
+									<optgroup label="Displays">
+										<option value="150">Display #1</option>
+									</optgroup>
 									<optgroup label="Placas">
 										<% for(var i = 200; i < 240; i++){ %>
 											<option value="<%= i %>">#<%= i %></option>
 										<% } %>
-									</optgroup>
-									<optgroup label="Displays">
-										<option value="150">Display #1</option>
 									</optgroup>
 								</select>
 							</div>
@@ -65,6 +68,14 @@
 										%>
 											<option value="<%= l.charCodeAt(i) %>">'<%= l[i] %>'</option>
 										<% } %>
+									</optgroup>
+									<optgroup label="Utilities">
+											<option value="10">Encender Luz</option>
+											<option value="11">Apagar Luz</option>
+											<option value="20">Encender Ventilador</option>
+											<option value="21">Apagar Ventilador</option>
+											<option value="30">Encender Alarma</option>
+											<option value="31">Apagar Alarma</option>
 									</optgroup>
 									<optgroup label="Displays">
 											<option value="13">Limpiar</option>

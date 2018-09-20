@@ -83,10 +83,12 @@ select#serial-dato{
 }
 .plano {
 	position: relative;
-	background-image: url(plano.png);
-	background-size: cover;
-	height: 692px;
-	width: 900px;
+    background-image: url(plano.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: #666666;
+    height: 692px;
+    width: 930px;
 }
 .cochera {
 	width: 66.7px;
@@ -97,6 +99,28 @@ select#serial-dato{
 }
 .cochera.libre {
 	background: green;
+}
+.utilities {
+    position: absolute;
+}
+.utilities div {
+	float: left;
+}
+.bulb {
+    width: 35px;
+    height: 35px;
+    background-image: url(/assets/bulb_off.svg);
+}
+.bulb.on {
+    background-image: url(/assets/bulb_on.svg);
+}
+.fan {
+    width: 35px;
+    height: 35px;
+    background-image: url(/assets/fan.svg);
+}
+.fan.on {
+    animation: rotating 1s linear infinite;
 }
 /************************
 *******GUIA PLANO********
@@ -117,4 +141,20 @@ select#serial-dato{
 }
 .guia .colores p{
 	display:inline-block;
+}
+
+
+
+
+
+
+
+
+@keyframes rotating {
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    }
 }
