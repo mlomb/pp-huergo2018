@@ -10,6 +10,9 @@ var datos = require('./../datos.json');
 var Controller = require('./controller.js');
 var buffer = [];
 var placas_estados = {};
+var utilities_estados = {
+	"160": { bulb: false, fan: false }
+};
 var displays = {
 	"150": "huergo compu"
 };
@@ -36,6 +39,12 @@ function syncDatabase() {
 	});
 }
 
+function syncUtilities() {
+	for(var id in utilities_estados) {
+		var buf = [id, utilities_estados[id].bulb ? 11 : 10];
+		Controller.send(buf);
+	}
+}
 function syncThings() {
 	console.log("INIT BACK");
 	for(var id in displays) {
@@ -46,6 +55,7 @@ function syncThings() {
 		}
 		Controller.send(buf);
 	}
+	syncUtilities();
 }
 
 Controller.onConnect = function() {
@@ -100,6 +110,10 @@ io.on('connection', function (socket) {
 		console.log("Updated display text ID: " + data.id + ", Text: " + data.text)
 		displays[data.id+""] = data.text;
 		syncThings();
+	});
+	socket.on('bulb', function (data) {
+		utilities_estados[data.id+""].bulb = !utilities_estados[data.id+""].bulb;
+		syncUtilities();
 	});
 });
 

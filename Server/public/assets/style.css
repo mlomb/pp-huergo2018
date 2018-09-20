@@ -110,6 +110,7 @@ select#serial-dato{
     width: 35px;
     height: 35px;
     background-image: url(/assets/bulb_off.svg);
+	cursor: pointer;
 }
 .bulb.on {
     background-image: url(/assets/bulb_on.svg);
@@ -118,6 +119,7 @@ select#serial-dato{
     width: 35px;
     height: 35px;
     background-image: url(/assets/fan.svg);
+	cursor: pointer;
 }
 .fan.on {
     animation: rotating 1s linear infinite;

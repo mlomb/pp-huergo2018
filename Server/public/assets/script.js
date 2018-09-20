@@ -90,6 +90,11 @@ function generarEstacionamiento() {
 			</div>
 		`);
 	}
+	
+	$(".bulb").click(function() {
+		var id = $(this).parent().data("id");
+		socket.emit('bubl', { id: id });
+	});
 }
 
 generarEstacionamiento();
