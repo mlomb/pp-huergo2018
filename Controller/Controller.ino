@@ -133,7 +133,7 @@ void bus_send(unsigned char id, unsigned char data, bool wait_for_response) {
 
 // esto se llama cuando el modulo ID envia el dato data
 void bus_receive(unsigned char id, unsigned char data) {
-  if(id >= PLACAS_START) {
+  if(id >= 160) {
     // es el paquete de una cochera
     if(data == 'O' || data == 'L')
       placa_estado(id, data);
@@ -193,9 +193,6 @@ void sv_loop() {
       BUFFER_SERVER[i + 1] = BUFFER_SERVER[i];
     }
     BUFFER_SERVER[0] = Serial.read();
-    
-    Serial.write(BUFFER_SERVER[0]);
-    Serial.write(100);
     
     if(BUFFER_SERVER[0] == 0) { // init
         Serial.write(199);

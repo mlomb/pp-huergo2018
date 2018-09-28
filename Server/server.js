@@ -69,6 +69,8 @@ Controller.onClose = function() {
 	
 }
 Controller.onDataReceived = function(data) {
+	console.log("Recibido: " + data);
+	
 	for(var i = 0; i < data.length; i++) {
 		buffer.push(data[i]);
 
@@ -88,7 +90,6 @@ Controller.onDataReceived = function(data) {
 			io.emit('estado', placas_estados);
 		}
 	}
-	//console.log("Recibido: " + data);
 }
 Controller.onDataSend = function(data) {
 	io.emit('serial', { direction: 'sended', data: data });
@@ -102,7 +103,6 @@ app.engine('html', require('ejs').renderFile);
 
 io.on('connection', function (socket) {
 	// un usuario se conecto por WebSockets
-	console.log(utilities_estados);
 	io.emit('estado', placas_estados);
 	io.emit('utilities', utilities_estados);
 	io.emit('displays', displays);

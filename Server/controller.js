@@ -8,7 +8,6 @@ module.exports = {
 	init: function() {
 		this.checkSerial();
 		this.packetQueue = new Queue(function (data, cb) {
-			console.log("QUEUE HIT: " + data.length);
 			if(this.serialPort && this.serialPort.isOpen) {
 				this.serialPort.write(data, function(err){
 					if(err) {
