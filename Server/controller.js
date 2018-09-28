@@ -1,4 +1,5 @@
 var SerialPort = require('serialport');
+var Queue = require('better-queue');
 
 // Este modulo se encarga de mantener la conexion
 // activa con el Controller
@@ -6,6 +7,21 @@ var SerialPort = require('serialport');
 module.exports = {
 	init: function() {
 		this.checkSerial();
+		this.packetQueue = new Queue(function (data, cb) {
+			console.log("QUEUE HIT: " + data.length);
+			if(this.serialPort && this.serialPort.isOpen) {
+				this.serialPort.write(data, function(err){
+					if(err) {
+						console.log("No se pudo escribir '" + data + "'.");
+					} else {
+						this.onDataSend(data);
+					}
+					setTimeout(cb, 200);
+				}.bind(this));
+			} else {
+				cb();
+			}
+		}.bind(this));
 		
 		setInterval(function() {
 			// periodic
@@ -91,15 +107,8 @@ module.exports = {
 	},
 	// envia al puerto serial data
 	// si no esta abierto no envia nada (y no se llama onDataSend)
+	// (esto fue cambiado a un sistema de Queue, y hace lo mismo pero despues de consumirla)
 	send: function(data) {
-		if(this.serialPort && this.serialPort.isOpen) {
-			this.serialPort.write(data, function(err){
-				if(err) {
-					console.log("No se pudo escribir '" + data + "'.");
-				} else {
-					this.onDataSend(data);
-				}
-			}.bind(this));
-		}
+		this.packetQueue.push(data);
 	}
 };

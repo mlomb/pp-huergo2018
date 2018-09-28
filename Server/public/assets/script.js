@@ -1,3 +1,64 @@
+
+function generarCocherasLinea(x_off, y_off, start) {
+	var id = start;
+	var dist = 0;
+	for(var i = 3; i >= 0; i--) {
+		var y = i * 33.8;
+		$(".plano").append('<div class="cochera" data-id="' + id + '" id="cochera-' + id + '"></div>');
+		var c = $(".plano .cochera:last");
+		c.css('left', x_off);
+		c.css('top', y + y_off);
+		id++;
+	}
+}
+function generarCocherasLado(x_off, y_off, start) {
+	var id = start;
+	var cocheras_x = [ 0, 155, 270, 425, 540 ];
+	cocheras_x.forEach(function(x) {
+		generarCocherasLinea(x + x_off, y_off, id);
+		id += 4;
+	});
+}
+function generarEstacionamiento() {
+	$(".plano").html('');
+	var start = 200;
+	generarCocherasLado(164.4,144.3, start);
+	generarCocherasLado(164.4,420.3, start + 20);
+	
+	var utilities = [
+		{ x: 260, y: 10, id: 160, rotate: 0 },
+		{ x: 583, y: 10, id: 161, rotate: 0 },
+		
+		{ x: 853, y: 200, id: 161, rotate: 90 },
+		{ x: 853, y: 480, id: 161, rotate: 90 },
+		
+		{ x: 260, y: 648, id: 161, rotate: 0 },
+		{ x: 583, y: 648, id: 161, rotate: 0 },
+	];
+	
+	for(var utils of utilities) {
+		$(".plano").append(`
+			<div style="left:` + utils.x + `px;top:` + utils.y + `px;` + (utils.rotate != 0 ? 'transform:rotate('+utils.rotate+'deg)' : '') + `" data-id="` + utils.id + `" class="utilities">
+				<div class="bulb"></div>
+				<div class="fan"></div>
+			</div>
+		`);
+	}
+	
+	$(".bulb").click(function() {
+		var id = $(this).parent().data("id");
+		socket.emit('bulb', { id: id });
+	});
+	
+	$(".fan").click(function() {
+		var id = $(this).parent().data("id");
+		socket.emit('fan', { id: id });
+	});
+}
+
+generarEstacionamiento();
+
+
 var socket = io();
 
 /*
@@ -45,59 +106,13 @@ socket.on('displays', function (displays) {
 	});
 });
 
-function generarCocherasLinea(x_off, y_off, start) {
-	var id = start;
-	var dist = 0;
-	for(var i = 3; i >= 0; i--) {
-		var y = i * 33.8;
-		$(".plano").append('<div class="cochera" data-id="' + id + '" id="cochera-' + id + '"></div>');
-		var c = $(".plano .cochera:last");
-		c.css('left', x_off);
-		c.css('top', y + y_off);
-		id++;
+socket.on('utilities', function (utilities) {
+	for(var u_id in utilities) {
+		var a = $('.utilities[data-id="' + u_id + '"]');
+		a.children(".bulb").toggleClass("on", utilities[u_id]["bulb"]);
+		a.children(".fan").toggleClass("on", utilities[u_id]["fan"]);
 	}
-}
-function generarCocherasLado(x_off, y_off, start) {
-	var id = start;
-	var cocheras_x = [ 0, 155, 270, 425, 540 ];
-	cocheras_x.forEach(function(x) {
-		generarCocherasLinea(x + x_off, y_off, id);
-		id += 4;
-	});
-}
-function generarEstacionamiento() {
-	$(".plano").html('');
-	var start = 200;
-	generarCocherasLado(164.4,144.3, start);
-	generarCocherasLado(164.4,420.3, start + 20);
-	
-	var utilities = [
-		{ x: 260, y: 10, id: 160, rotate: 0 },
-		{ x: 583, y: 10, id: 161, rotate: 0 },
-		
-		{ x: 853, y: 200, id: 161, rotate: 90 },
-		{ x: 853, y: 480, id: 161, rotate: 90 },
-		
-		{ x: 260, y: 648, id: 161, rotate: 0 },
-		{ x: 583, y: 648, id: 161, rotate: 0 },
-	];
-	
-	for(var utils of utilities) {
-		$(".plano").append(`
-			<div style="left:` + utils.x + `px;top:` + utils.y + `px;` + (utils.rotate != 0 ? 'transform:rotate('+utils.rotate+'deg)' : '') + `" data-id="` + utils.id + `" class="utilities">
-				<div class="bulb on"></div>
-				<div class="fan on"></div>
-			</div>
-		`);
-	}
-	
-	$(".bulb").click(function() {
-		var id = $(this).parent().data("id");
-		socket.emit('bubl', { id: id });
-	});
-}
-
-generarEstacionamiento();
+});
 
 $(".cochera").click(function() {
 	var id = $(this).data("id");

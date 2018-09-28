@@ -11,7 +11,7 @@ var Controller = require('./controller.js');
 var buffer = [];
 var placas_estados = {};
 var utilities_estados = {
-	"160": { bulb: false, fan: false }
+	"160": { "bulb": false, "fan": false }
 };
 var displays = {
 	"150": "huergo compu"
@@ -40,12 +40,14 @@ function syncDatabase() {
 }
 
 function syncUtilities() {
+	io.emit('utilities', utilities_estados);
 	for(var id in utilities_estados) {
-		var buf = [id, utilities_estados[id].bulb ? 11 : 10];
-		Controller.send(buf);
+		Controller.send([ id, utilities_estados[id]["bulb"] ? 10 : 11 ]);
+		Controller.send([ id, utilities_estados[id]["fan"] ? 20 : 21 ]);
 	}
 }
 function syncThings() {
+	io.emit('estado', placas_estados);
 	console.log("INIT BACK");
 	for(var id in displays) {
 		var buf = [id, 13]; // 13 es borrar display
@@ -81,12 +83,12 @@ Controller.onDataReceived = function(data) {
 		if(id >= 200) {
 			var estado = buffer.shift();
 			placas_estados[id] = estado == 76;
-			console.log(id + ":" + estado);
+			//console.log(id + ":" + estado);
 			io.emit('serial', { direction: 'received', data: [id, estado] });
 			io.emit('estado', placas_estados);
 		}
 	}
-	console.log("Recibido: " + data);
+	//console.log("Recibido: " + data);
 }
 Controller.onDataSend = function(data) {
 	io.emit('serial', { direction: 'sended', data: data });
@@ -100,7 +102,9 @@ app.engine('html', require('ejs').renderFile);
 
 io.on('connection', function (socket) {
 	// un usuario se conecto por WebSockets
+	console.log(utilities_estados);
 	io.emit('estado', placas_estados);
+	io.emit('utilities', utilities_estados);
 	io.emit('displays', displays);
 
 	socket.on('serial', function (data) {
@@ -112,7 +116,11 @@ io.on('connection', function (socket) {
 		syncThings();
 	});
 	socket.on('bulb', function (data) {
-		utilities_estados[data.id+""].bulb = !utilities_estados[data.id+""].bulb;
+		utilities_estados[data.id+""]["bulb"] = !utilities_estados[data.id+""]["bulb"];
+		syncUtilities();
+	});
+	socket.on('fan', function (data) {
+		utilities_estados[data.id+""]["fan"] = !utilities_estados[data.id+""]["fan"];
 		syncUtilities();
 	});
 });
