@@ -1,141 +1,155 @@
 <% include layouts/header.ejs %>
-    <h3>Reservá tu cochera!</h3>
+   
+   <section id="indexPage">
+       <div class="main"></div>
+        <div class="overlay">
+            <div class="title">
+                <h1>Bienvenido a <br class="brasil">Tutu Parking!</h1>
+            </div>
+        </div>
+        <div class="libresContainer">
+            <div class="textos">
+                <span>Cocheras <br class="brasil2"> disponibles</span>
+                <p>72</p>
+                <button class="orangeborderbtn">Reservar ya!</button>
+            </div>
+        </div>
+   </section>
+   
+    <section id="reservationPage">
+        <h3>Reservá tu cochera!</h3>
 
-    <div class="pbar-container">
-        <ul class="progressbar">
-            <li id="itemOne" target=".stepOne" detail=".detailsOne" class="progressItem active">Paso 1</li>
-            <li id="itemTwo" target=".stepTwo" detail=".detailsTwo" class="progressItem">Paso 2</li>
-            <li id="itemThree" target=".stepThree" detail=".detailsThree" class="progressItem">Paso 3</li>
-        </ul>   
-    </div>
+        <div class="pbar-container">
+            <ul class="progressbar">
+                <li id="itemOne" target=".stepOne" detail=".detailsOne" class="progressItem active">Paso 1</li>
+                <li id="itemTwo" target=".stepTwo" detail=".detailsTwo" class="progressItem">Paso 2</li>
+                <li id="itemThree" target=".stepThree" detail=".detailsThree" class="progressItem">Paso 3</li>
+            </ul>   
+        </div>
+        
+        <div class="content-body">
     
-    <div class="content-body">
-
-        <div class="stepSection stepOne">
-            <label for="">Horario de entrada</label>
-            <input type="text" class="timepicker" id="timeOne">
-            <label for="">Horario de salida</label>
-            <input type="text" class="timepicker" id="timeTwo">
+            <div class="stepSection stepOne">
+                <label for="">Horario de entrada</label>
+                <input type="text" class="timepicker" id="timeOne">
+                <label for="">Horario de salida</label>
+                <input type="text" class="timepicker" id="timeTwo">
+                
+                <div class="NextContainer">
+                    <button onClick="goTwo()" class="btnNext">Siguente »</button>
+                </div>
+            </div>
             
-            <div class="NextContainer">
-                <button onClick="goTwo()" class="btnNext">Siguente »</button>
+            <div class="stepSection stepTwo">
+    
+                <div class="card-wrapper">
+                    <div class="mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title mdl-card--expand" style="background-image:url('/images/normal.jpg')">
+                            <h2 class="mdl-card__title-text">Normal</h2>
+                        </div>
+                        <div class="mdl-card__supporting-text">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            Aenan convallis.
+                        </div>
+                        <div class="mdl-card__actions mdl-card--border">
+                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect selectParking">
+                                Seleccionar
+                            </a>
+                        </div>
+                    </div>
+    
+                    <div class="mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title mdl-card--expand" style="background-image:url('/images/discapacitados.jpg')">
+                            <h2 class="mdl-card__title-text">Discapacitado</h2>
+                        </div>
+                        <div class="mdl-card__supporting-text">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            Aenan convallis.
+                        </div>
+                        <div class="mdl-card__actions mdl-card--border">
+                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect selectParking">
+                                Seleccionar
+                            </a>
+                        </div>
+                    </div>
+    
+                    <div class="mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title mdl-card--expand" style="background-image:url('/images/premium.jpg')">
+                            <h2 class="mdl-card__title-text">Premium</h2>
+                        </div>
+                        <div class="mdl-card__supporting-text">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            Aenan convallis.
+                        </div>
+                        <div class="mdl-card__actions mdl-card--border">
+                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect selectParking">
+                                Seleccionar
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
+            
+            <div class="stepSection stepThree">
+                <h3>Confirmar reserva!</h3>
+                <div class="details">
+                    <div class="details-row detailsOne">
+                        <div><i class="fas fa-info-circle"></i></div>
+                        <p>Detalles: </p>
+                        <p id="timeDetail">12 : 00 PM - 13 : 00 PM</p>
+                    </div>
+                    <div class="details-row detailsTwo">
+                        <div><i class="fas fa-car"></i></div>
+                        <p>Estacionamiento: </p>
+                        <p id="parkDetail">Normal</p>
+                    </div>
+                </div>
+                <div class="NextContainer">
+                    <button onClick="end()" class="btnNext">Confirmar »</button>
+                </div>
+            </div>
+    
+            <form id="payForm" style="display:none;">
+                <input type="text" name="formEntrada">
+                <input type="text" name="formSalida">
+                <input type="text" name="formSlot">
+            </form>
+    
         </div>
-        
-        <div class="stepSection stepTwo">
+    </section>
 
-            <div class="card-wrapper">
-                <div class="mdl-card mdl-shadow--2dp">
-                    <div class="mdl-card__title mdl-card--expand" style="background-image:url('/images/normal.jpg')">
-                        <h2 class="mdl-card__title-text">Normal</h2>
-                    </div>
-                    <div class="mdl-card__supporting-text">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Aenan convallis.
-                    </div>
-                    <div class="mdl-card__actions mdl-card--border">
-                        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                            Seleccionar
-                        </a>
-                    </div>
-                </div>
-
-                <div class="mdl-card mdl-shadow--2dp">
-                    <div class="mdl-card__title mdl-card--expand" style="background-image:url('/images/discapacitados.jpg')">
-                        <h2 class="mdl-card__title-text">Discapacitados</h2>
-                    </div>
-                    <div class="mdl-card__supporting-text">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Aenan convallis.
-                    </div>
-                    <div class="mdl-card__actions mdl-card--border">
-                        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                            Seleccionar
-                        </a>
-                    </div>
-                </div>
-
-                <div class="mdl-card mdl-shadow--2dp">
-                    <div class="mdl-card__title mdl-card--expand" style="background-image:url('/images/premium.jpg')">
-                        <h2 class="mdl-card__title-text">Premium</h2>
-                    </div>
-                    <div class="mdl-card__supporting-text">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Aenan convallis.
-                    </div>
-                    <div class="mdl-card__actions mdl-card--border">
-                        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                            Seleccionar
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!--
-            <div class="NextContainer">
-                <button onClick="goThree()" class="btnNext">Siguente »</button>
-            </div>
-            -->
+    <section id="logInPage">
+        <div id="loadingScreen">
+            <img src="/images/loading.gif" alt="Loading gif">
         </div>
-        
-        <div class="stepSection stepThree">
-            <h3>Felicidades</h3>
-            <div class="details">
-                <div class="details-row detailsOne">
-                    <div><i class="fas fa-info-circle"></i></div>
-                    <p>Detalles: </p>
-                    <p id="timeDetail">12 : 00 PM - 13 : 00 PM</p>
+        <div class="login-box">
+            <form action="login" method="POST">
+                <div>
+                    <i class="fas fa-user"></i>
+                    <label for="user">E-Mail</label>
                 </div>
-                <div class="details-row detailsTwo">
-                    <div><i class="fas fa-car"></i></div>
-                    <p>Estacionamiento: </p>
-                    <p>J-16</p>
+                <input type="text" id="user" name="email">
+                <div>
+                    <i class="fas fa-key"></i>
+                    <label for="pass">Contraseña</label>
                 </div>
-            </div>
-            <div class="NextContainer">
-                <button onClick="end()" class="btnNext">Confirmar »</button>
-            </div>
+                <input type="password" id="pass" name="pass">
+                <button type="submit">Ingresar</button>
+                <div class="socialContainer">
+                    <button type="button" id="google-login">
+                        <i class="fab fa-google"></i>
+                    </button>
+                    <button type="button" id="facebook-login">
+                        <i class="fab fa-facebook"></i>
+                    </button>
+                    <button type="button" id="twitter-login">
+                        <i class="fab fa-twitter"></i>
+                    </button>
+                    <button type="button" id="github-login">
+                        <i class="fab fa-github"></i>
+                    </button>
+                </div>
+            </form>
         </div>
-
-    </div>
-
-    <script>
-        $('.timepicker').wickedpicker({
-            now: '12:00', 
-            twentyFour: false,  
-        });
-
-        $('.timepicker').change(function(){
-            $("#timeDetail").text($('#timeOne').val() + " - " + $('#timeTwo').val());
-        })
-    </script>
-
-    <script>
-        $(document).on("click",".progressItem", function(){
-            //BARRITA
-            $(this).addClass("active");
-            $(this).prevAll().addClass("active");
-            $(this).nextAll().removeClass("active");
-
-            //MOSTRAR SECCION
-            $(".stepSection").each(function(){
-                $(this).css('display','none');
-            })
-            $($(this).attr('target')).css('display','block');
-
-            //MOSTRAR DETALLES
-            $($(this).attr('detail')).prevAll().css('display','block');
-            $($(this).attr('detail')).css('display','block');
-            $($(this).attr('detail')).nextAll().css('display','none');
-        })
-        function goTwo(){
-            $('#itemTwo').click();
-        }
-        function goThree(){
-            $('#itemThree').click();
-        }
-        function end(){
-            alert("Felicidades");
-        }
-    </script>
-
+    </section>
 <% include layouts/footer.ejs %>

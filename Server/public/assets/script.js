@@ -56,23 +56,12 @@ function generarEstacionamiento() {
 	});
 	
 	$(".allBulbs").click(function() {
-		allBulbs();
+		socket.emit('bulbs', $(this).data("active"));
 	});
 	
 	$(".allFans").click(function() {
-		allFans();
+		socket.emit('fans', $(this).data("active"));
 	});
-	
-	function allBulbs(){
-		for(var i = 160; i < 166; i++){
-			socket.emit('bulb', { id: i });
-		}
-	}	
-	function allFans(){
-		for(var i = 160; i < 166; i++){
-			socket.emit('fan', { id: i });
-		}
-	}
 }
 
 generarEstacionamiento();

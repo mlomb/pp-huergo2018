@@ -27,21 +27,23 @@
     <script type="text/javascript" src="/timepicker/src/wickedpicker.js"></script>
     <!-- Main -->
     <link rel="stylesheet" href="/css/styles.css">
-    <script src="/js/main.js"></script>
+    <!--segments 7-->
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/segment7" type="text/css"/>
 </head>
 <body>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
         <header class="mdl-layout__header">
           <div class="mdl-layout__header-row">
-            <a href="/"><img id="menuLogo" src="/images/Logos/logo2.png" alt="Logo Tutu Parking"></a> 
+            <a goto="indexPage"><img id="menuLogo" src="/images/Logos/logo2.png" alt="Logo Tutu Parking"></a> 
             <div class="mdl-layout-spacer"></div>
             <nav class="mdl-navigation mdl-layout--large-screen-only">
                 <%if (login == false) { %>
-                    <a class="mdl-navigation__link" href="login">LogIn</a>
-                    <a class="mdl-navigation__link" href="register">Register</a>
+                    <a class="mdl-navigation__link" goto="reservationPage">Reservar</a>
+                    <a class="mdl-navigation__link" goto="logInPage">LogIn</a>
                 <% }else{ %>
                     <img src="<%= user.picture %>" alt="" id="menuProfile">
-                    <a class="mdl-navigation__link" href="profile"><%= user.name %></a>
+                    <a class="mdl-navigation__link"><%= user.name %></a>
+                    <a class="mdl-navigation__link" goto="reservationPage">Reservar</a>
                     <a class="mdl-navigation__link" onclick="logOut()">LogOut</a>
                 <% } %>
             </nav>
@@ -50,10 +52,10 @@
         <div class="mdl-layout__drawer">
             <nav class="mdl-navigation">
                 <%if (login == false) { %>
-                    <a class="mdl-navigation__link" href="login">LogIn</a>
-                    <a class="mdl-navigation__link" href="register">Register</a>
+                    <a class="mdl-navigation__link" goto="reservationPage">Reservar</a>
+                    <a class="mdl-navigation__link" goto="logInPage">LogIn</a>
                 <% }else{ %>
-                    <a class="mdl-navigation__link" href="profile">Perfil</a>
+                    <a class="mdl-navigation__link" goto="reservationPage">Reservar</a>
                     <a class="mdl-navigation__link" onclick="logOut()">LogOut</a>
                 <% } %>
             </nav>

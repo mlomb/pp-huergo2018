@@ -16,6 +16,9 @@ var utilities_estados = {
 var displays = {
 	"150": "huergo compu"
 };
+var panico = {
+	id: 0
+};
 
 var pool = mysql.createPool(datos.database);
 
@@ -88,6 +91,13 @@ Controller.onDataReceived = function(data) {
 			//console.log(id + ":" + estado);
 			io.emit('serial', { direction: 'received', data: [id, estado] });
 			io.emit('estado', placas_estados);
+		} else if((id+"") in utilities_estados) {
+			var pulsado = buffer.shift();
+			console.log("pulsado");
+			if(pulsado == 'S') {
+				panico.id = parseInt(id);
+				console.log("BOTON DE PANICO #" + id + " PRESIONADO");
+			}
 		}
 	}
 }
@@ -116,11 +126,27 @@ io.on('connection', function (socket) {
 		syncThings();
 	});
 	socket.on('bulb', function (data) {
-		utilities_estados[data.id+""]["bulb"] = !utilities_estados[data.id+""]["bulb"];
+		var i = data.id+"";
+		if(!(i in utilities_estados)) return;
+		utilities_estados[i]["bulb"] = !utilities_estados[i]["bulb"];
 		syncUtilities();
 	});
 	socket.on('fan', function (data) {
-		utilities_estados[data.id+""]["fan"] = !utilities_estados[data.id+""]["fan"];
+		var i = data.id+"";
+		if(!(i in utilities_estados)) return;
+		utilities_estados[i]["fan"] = !utilities_estados[i]["fan"];
+		syncUtilities();
+	});
+	socket.on('bulbs', function (active) {
+		for(var id in utilities_estados) {
+			utilities_estados[id]["bulb"] = active;
+		}
+		syncUtilities();
+	});
+	socket.on('fans', function (active) {
+		for(var id in utilities_estados) {
+			utilities_estados[id]["fan"] = active;
+		}
 		syncUtilities();
 	});
 });

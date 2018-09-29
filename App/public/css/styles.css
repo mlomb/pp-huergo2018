@@ -8,10 +8,104 @@
 h3, h4 {
     font-family: 'Quicksand', sans-serif;
 }
+.mdl-layout__content{
+    /*background-image: url('/images/backLogIn.png');*/
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+}
 body{
 	overflow-x:hidden;
     text-align: center;
 }
+
+/******************HOME NAKA***************/
+.main{
+    width: 100vw;
+    height: 100vh;
+    background-image: url(/images/1366bg.jpg);
+    background-size: cover;
+    background-position: center;
+}   
+.overlay{
+    width: 100vw;
+    height: 50vh;
+    margin-top: -100vh;
+    background-image: linear-gradient(#ff000000,#181818);
+}
+.libresContainer{
+    width: 100vw;
+    height: 50vh;
+    background-color:#181818;
+}
+.title{
+    margin-top: 0px;
+    padding-top: 150px;
+}
+
+.page-content{
+    width: 100%;
+    padding-top: 20px;
+}
+.reservationPage > h3{
+    margin-top: 0px;
+}
+.title h1{
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+    font-size: 72px;
+    font-weight: 600;
+    letter-spacing: -.005em;
+}
+.textos{
+    margin-top: 0px;
+}
+.libresContainer span{
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: -.005em;
+    margin: 24px 0;
+}
+.libresContainer p{
+    font-family: 'Montserrat', sans-serif;
+    color: #cc771c;
+    font-size: 120px;
+    font-weight: 600;
+    letter-spacing: -.005em;
+    font-family: 'Segment7Standard'; 
+    margin-top: 150px;
+    font-weight: normal; 
+    font-style: italic; 
+}
+.orangeborderbtn{
+    border-color: #cc771c!important;
+    border: 1px solid #cc771c!important;
+    display: inline-block;
+    padding: 10px 20px;
+    vertical-align: middle;
+    text-align: center;
+    color: #cc771c;
+    cursor: pointer;
+    background-color: #28659a00;
+    margin-top: 80px;
+}
+.brasil{
+    display: none
+}
+.brasil2{
+    display: none
+}
+.orangeborderbtn:hover {
+    box-shadow: 0 8px 16px 0 rgba(204, 119, 28, 0.11), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+
+/****************HOME***************/
 p {
     margin: 0;
 }
@@ -422,6 +516,59 @@ header .mdl-layout__drawer-button{
         width: 600px;
     }
 }
+
+/* Medium devices (1400px and down) */
+@media (max-width: 1400px) { 
+    .textos {
+        margin-top: 0px;
+    }
+    .title{
+        padding-top: 50px;
+    }
+    .libresContainer p {
+        margin-top: 80px;
+    }
+} 
+/* Medium devices (1224px and down) */
+@media (max-width: 1224px) { 
+    .textos{
+        margin-top: 100px;
+    }
+    .brasil{
+        display: block;
+    }
+} 
+/* Small devices (768px and down) */
+@media (max-width: 768px) { 
+
+
+} 
+/* Extra small devices (phones 480px and down) */
+@media (max-width: 480px) {
+    .title h1 {
+        font-size: 25px;
+    }
+    .title {
+        margin-top: 80px;
+    }
+    .textos {
+         margin-top: 0px; 
+    }
+    .brasil2{
+        display: block;
+    }
+    .libresContainer span {
+        font-size: 20px;
+    }
+    .libresContainer p {
+        font-size: 60px;
+        margin-top: 30px;
+    }
+    .orangeborderbtn {
+        padding: 6px 12px;
+    }
+
+} 
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (max-width: 992px) {

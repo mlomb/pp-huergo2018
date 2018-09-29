@@ -8,7 +8,11 @@
         <main class="mdl-layout__content">
 			<section class="mdl-layout__tab-panel is-active" id="estacionamiento">
 				<div class="page-content">
-					<h3>Estado actual de cocheras: </h3><button class="allBulbs">Luces</button><button class="allFans">Ventiladores</button>
+					<h3>Estado actual de cocheras: </h3>
+					<button class="allBulbs" data-active="true">Encender todas las luces</button>
+					<button class="allBulbs" data-active="false">Apagar todas las luces</button>
+					<button class="allFans" data-active="true">Encender todos los ventiladores</button>
+					<button class="allFans" data-active="false">Apagar todos los ventiladores</button>
 					<div class="plano-container">
 						<div class="plano"></div>
 					</div>

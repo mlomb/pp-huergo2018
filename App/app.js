@@ -4,8 +4,14 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const admin = require('firebase-admin');
 const mysql = require('mysql');
+const mp = require('mercadopago');
 
 var datos = require('./../datos.json');
+
+mp.configure({
+    client_id: '7287645047868069',
+    client_secret: 'poJoEQDD3lcMggBGL93Bj9jbQit75Q4E'
+});
 
 admin.initializeApp({
   credential: admin.credential.cert(datos.firebase)
@@ -68,11 +74,11 @@ app.get('/', function(req,res){
     });
 });
 
-app.get('/profile', function(req,res){
+/*app.get('/profile', function(req,res){
     checkLogin(req, function(data) {
         res.render('profile', data);
     });
-});
+});*/
 
 app.get('/home', function(req,res){
     checkLogin(req, function(data) {
@@ -117,6 +123,47 @@ app.post('/api/login', function(req,res){
     });
 });
 
-app.listen(8080, function(){
-    console.log('Server started on port 8080');
+app.post('/api/pay', function(req,res){
+    var entrada = req.body.formEntrada;
+    var salida = req.body.formSalida;
+    var slot = req.body.formSlot;
+
+    var precio = 0;
+    //VER LO DE LOS PRECIOS
+    switch(slot){
+        case "Normal":
+
+        break;
+        case "Discapacitado":
+
+        break;
+        case "Premium":
+
+        break;
+        
+    }
+
+    var preference = {
+        items: [
+          item = {
+            title: 'Estacionamiento '+slot,
+            quantity: 1,
+            currency_id: 'ARS',
+            unit_price: 120
+          }
+        ],
+    };
+     
+    mp.preferences.create(preference)
+    .then(function (preference) {
+        console.log(preference.body.sandbox_init_point);
+        console.log(preference.body.init_point);
+        res.end(preference.body.init_point);
+    }).catch(function (error) {
+        console.log(error);
+    });
+});
+
+app.listen(8081, function(){
+    console.log('Server started on port 8081');
 });
