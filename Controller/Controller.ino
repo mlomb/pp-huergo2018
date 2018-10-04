@@ -10,7 +10,7 @@ unsigned char last_packet_data = 0;
 
 unsigned char BUFFER_SERVER[BUFFER_SIZE];
 
-unsigned char barrido_last = PLACAS_START;
+int barrido_last = -1;
 bool barrido[PLACAS]; // guarda el estado de las placas | true=libre
 
 bool barrer = true;
@@ -96,9 +96,17 @@ void bus_next() {
     // si no hay otra cosa que mandar
     // seguimos barriendo
     barrido_last++;
-    if(barrido_last >= PLACAS_START + PLACAS)
-      barrido_last = PLACAS_START;
-    bus_send(barrido_last, 'e', true);
+    
+    if(barrido_last <= PLACAS) {
+      // cocheras
+      bus_send(barrido_last + PLACAS_START, 'e', true);
+    } else if(barrido_last <= PLACAS + 1) { // +1 cantidad de utilities
+      // botones de panico
+      bus_send(barrido_last - PLACAS - 1 + 160, '(', true);
+    } else {
+      barrido_last = -1;
+    }
+    
   }
 }
 
@@ -133,16 +141,19 @@ void bus_send(unsigned char id, unsigned char data, bool wait_for_response) {
 
 // esto se llama cuando el modulo ID envia el dato data
 void bus_receive(unsigned char id, unsigned char data) {
-  if(id >= 160) {
+  if(id >= PLACAS_START) {
     // es el paquete de una cochera
     if(data == 'O' || data == 'L')
       placa_estado(id, data);
+  } else if(id >= 160) {
+    if(data == 'S') {
+      Serial.write((unsigned char)id);
+      Serial.write('S');
+    }
   } else {
     // si es el paquete de cualquier otro modulo, se reenvia al server
-    //Serial.write((char)id);
-    //Serial.write((char)data);
-    Serial.write(0);
-    Serial.write(1);
+    Serial.write((unsigned char)id);
+    Serial.write((unsigned char)data);
   }
 }
 
@@ -175,7 +186,7 @@ void bus_loop() {
       }
       BUFFER[0] = Serial1.read();
       
-      if(BUFFER[1] >= PLACAS_START) {
+      if(BUFFER[1] >= 160) {
         // si es >= siginifica que tenemos un paquete valido en BUFFER
         
         // lo procesamos

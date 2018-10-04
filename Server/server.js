@@ -11,7 +11,7 @@ var Controller = require('./controller.js');
 var buffer = [];
 var placas_estados = {};
 var utilities_estados = {
-	"160": { "bulb": false, "fan": false }
+	"160": { "bulb": false, "fan": false, "alarm": false }
 };
 var displays = {
 	"150": "huergo compu"
@@ -44,9 +44,11 @@ function syncDatabase() {
 
 function syncUtilities() {
 	io.emit('utilities', utilities_estados);
+	io.emit('panico', panico);
 	for(var id in utilities_estados) {
 		Controller.send([ id, utilities_estados[id]["bulb"] ? 10 : 11 ]);
 		Controller.send([ id, utilities_estados[id]["fan"] ? 20 : 21 ]);
+		Controller.send([ id, utilities_estados[id]["alarm"] ? 30 : 31 ]);
 	}
 }
 function syncThings() {
@@ -85,19 +87,30 @@ Controller.onDataReceived = function(data) {
 	while(buffer.length >= 2) {
 		var id = buffer.shift();
 		
+		var valid = false;
+		
 		if(id >= 200) {
+			valid = true;
+			
 			var estado = buffer.shift();
 			placas_estados[id] = estado == 76;
+		} else if((id+"") in utilities_estados) {
+			valid = true;
+			
+			var pulsado = buffer.shift();
+			if(pulsado == 83) {
+				panico.id = parseInt(id);
+				console.log("BOTON DE PANICO #" + id + " PRESIONADO");
+				toggleAllUtilities("bulb", true);
+				toggleAllUtilities("alarm", true);
+				syncUtilities();
+			}
+		}
+		
+		if(valid) {
 			//console.log(id + ":" + estado);
 			io.emit('serial', { direction: 'received', data: [id, estado] });
 			io.emit('estado', placas_estados);
-		} else if((id+"") in utilities_estados) {
-			var pulsado = buffer.shift();
-			console.log("pulsado");
-			if(pulsado == 'S') {
-				panico.id = parseInt(id);
-				console.log("BOTON DE PANICO #" + id + " PRESIONADO");
-			}
 		}
 	}
 }
@@ -105,6 +118,12 @@ Controller.onDataSend = function(data) {
 	io.emit('serial', { direction: 'sended', data: data });
 	
 	console.log("Enviado: " + data);
+}
+
+function toggleAllUtilities(name, active) {
+	for(var id in utilities_estados) {
+		utilities_estados[id][name] = active;
+	}
 }
 
 
@@ -138,15 +157,16 @@ io.on('connection', function (socket) {
 		syncUtilities();
 	});
 	socket.on('bulbs', function (active) {
-		for(var id in utilities_estados) {
-			utilities_estados[id]["bulb"] = active;
-		}
+		toggleAllUtilities("bulb", active);
 		syncUtilities();
 	});
 	socket.on('fans', function (active) {
-		for(var id in utilities_estados) {
-			utilities_estados[id]["fan"] = active;
-		}
+		toggleAllUtilities("fan", active);
+		syncUtilities();
+	});
+	socket.on('stop_panic', function (active) {
+		toggleAllUtilities("alarm", false);
+		panico.id = 0;
 		syncUtilities();
 	});
 });

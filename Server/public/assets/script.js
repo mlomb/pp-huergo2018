@@ -62,6 +62,11 @@ function generarEstacionamiento() {
 	$(".allFans").click(function() {
 		socket.emit('fans', $(this).data("active"));
 	});
+	
+	
+	$("#stop-panic").click(function() {
+		socket.emit('stop_panic', {});
+	});
 }
 
 generarEstacionamiento();
@@ -119,6 +124,12 @@ socket.on('utilities', function (utilities) {
 		var a = $('.utilities[data-id="' + u_id + '"]');
 		a.children(".bulb").toggleClass("on", utilities[u_id]["bulb"]);
 		a.children(".fan").toggleClass("on", utilities[u_id]["fan"]);
+	}
+});
+
+socket.on('panico', function (panico) {
+	if(panico.id == 0) {
+		
 	}
 });
 

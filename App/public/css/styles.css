@@ -21,7 +21,11 @@ body{
 	overflow-x:hidden;
     text-align: center;
 }
-
+#reservationPage{
+    top: 0;
+    position: absolute;
+    width: 100%;
+}
 /******************HOME NAKA***************/
 .main{
     width: 100vw;
@@ -124,6 +128,7 @@ header .material-icons {
 }
 .mdl-layout--fixed-header>.mdl-layout__header #menuLogo{
     height: 44px;
+    cursor: pointer;
 }
 .mdl-layout--fixed-header>.mdl-layout__header #menuProfile{
     height: 44px;
@@ -531,17 +536,25 @@ header .mdl-layout__drawer-button{
 } 
 /* Medium devices (1224px and down) */
 @media (max-width: 1224px) { 
+    
     .textos{
-        margin-top: 100px;
+        margin-top: 0px;
     }
     .brasil{
         display: block;
     }
+
 } 
 /* Small devices (768px and down) */
 @media (max-width: 768px) { 
-
-
+    
+    .textos{
+        margin-top: 0px;
+    }
+    .orangeborderbtn {
+        padding: 6px 12px;
+        margin-top: 40px;
+    }
 } 
 /* Extra small devices (phones 480px and down) */
 @media (max-width: 480px) {
@@ -549,7 +562,7 @@ header .mdl-layout__drawer-button{
         font-size: 25px;
     }
     .title {
-        margin-top: 80px;
+        margin-top: 0px;
     }
     .textos {
          margin-top: 0px; 
