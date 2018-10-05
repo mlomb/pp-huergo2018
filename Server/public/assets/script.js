@@ -109,6 +109,7 @@ socket.on('displays', function (displays) {
 				</div>
 				<button class="display-update mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Modificar</button>
 			</div>
+			<div class="dislay-text"></div>
 		`);
 		$('div[data-id="' + display_id + '"] input').val(displays[display_id]);
 	}

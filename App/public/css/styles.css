@@ -507,7 +507,39 @@ header .mdl-layout__drawer-button{
     height: 150px;    
 }
 
+/*---------------------------------
+            APP    320x568
+----------------------------------*/
+main.mdl-layout__content {
+    background: url(/images/1366bg.jpg) center / cover;
+}
+.demo-layout-transparent .mdl-layout__header,
+.demo-layout-transparent .mdl-layout__drawer-button {
+  /* This background is dark, so we set text to white. Use 87% black instead if
+     your background is light. */
+  color: white;
+}
+#asdf{
+    position: absolute;
+    width: 100%;
+    height: 30%;
+}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ------------------ end app --------------------*/
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (max-width: 1200px) {
 

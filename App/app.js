@@ -20,7 +20,7 @@ admin.initializeApp({
 var con = mysql.createPool(datos.database);
 
 function doQuery(query, params, callback) {
-    pool.getConnection(function(err, connection) {
+    con.getConnection(function(err, connection) {
         if(err) throw err;
         connection.query(query, params, function(err, results) {
             connection.release();
@@ -33,11 +33,9 @@ function doQuery(query, params, callback) {
 const admin_auth = admin.auth();
 const app = express();
 
-//PARSER PARA POST
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-//TEMPLATE ENGINE
 app.use("/", express.static(path.join(__dirname, 'public')));
 app.set('view engine','ejs');
 
@@ -68,51 +66,17 @@ function checkLogin(req, pred) {
     });
 }
 
-app.get('/connect', function(req,res){
-    var net = require('net');
-
-    var client = new net.Socket();
-    client.connect(8080, '173.236.86.18', function() {
-        console.log('Connected');
-        //client.write('Hello, server! Love, Client.');
-    });
-    
-    client.on('data', function(data) {
-        console.log('Received: ' + data);
-        client.destroy(); // kill client after server's response
-    });
-    
-    client.on('close', function() {
-        console.log('Connection closed');
-    });
-});
-
 app.get('/', function(req,res){
-    checkLogin(req, function(data) {
-        res.render('index', data);
+    doQuery("SELECT count(id) FROM slots WHERE state = 'LIBRE'", [] , function (result) {
+        checkLogin(req, function(data) {
+            data.cocheras = result[0]["count(id)"];
+            res.render('index', data);
+        });
     });
 });
 
-/*app.get('/profile', function(req,res){
-    checkLogin(req, function(data) {
-        res.render('profile', data);
-    });
-});*/
-
-app.get('/home', function(req,res){
-    checkLogin(req, function(data) {
-        res.render('home', data);
-    });
-});
-
-app.get('/login', function(req,res){
-    checkLogin(req, function(data) {
-        if(!data.login) {
-            res.render('login', data);
-        } else {
-            res.redirect('/');
-        }
-    });
+app.get('/app', function(req,res){
+    res.render('app');
 });
 
 app.get('/api/logout', function(req,res){
@@ -147,8 +111,7 @@ app.post('/api/pay', function(req,res){
     var salida = req.body.formSalida;
     var slot = req.body.formSlot;
 
-    var precio = 0;
-    //VER LO DE LOS PRECIOS
+    var precio = 120;
     switch(slot){
         case "Normal":
 
@@ -165,22 +128,23 @@ app.post('/api/pay', function(req,res){
     var preference = {
         items: [
           item = {
-            title: 'Estacionamiento '+slot,
+            title: 'Estacionamiento ' + slot,
             quantity: 1,
             currency_id: 'ARS',
-            unit_price: 120
+            unit_price: precio
           }
         ],
     };
      
-    mp.preferences.create(preference)
-    .then(function (preference) {
-        console.log(preference.body.sandbox_init_point);
+    mp.preferences.create(preference).then(function (preference) {
         console.log(preference.body.init_point);
-        res.end(preference.body.init_point);
+        res.redirect(preference.body.init_point);
+        res.end();
     }).catch(function (error) {
         console.log(error);
     });
+
+    console.log("ASDASDW");
 });
 
 app.listen(8081, function(){

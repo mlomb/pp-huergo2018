@@ -1,5 +1,4 @@
 <% include layouts/header.ejs %>
-   
    <section id="indexPage">
        <div class="main"></div>
         <div class="overlay">
@@ -10,8 +9,8 @@
         <div class="libresContainer">
             <div class="textos">
                 <span>Cocheras <br class="brasil2"> disponibles</span>
-                <p>72</p>
-                <button class="orangeborderbtn">Reservar ya!</button>
+                <p><%= cocheras %></p>
+                <a class="orangeborderbtn" goto="reservationPage">Reservar ya!</a>
             </div>
         </div>
    </section>

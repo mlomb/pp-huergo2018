@@ -11,7 +11,8 @@ unsigned char last_packet_data = 0;
 unsigned char BUFFER_SERVER[BUFFER_SIZE];
 
 int barrido_last = -1;
-bool barrido[PLACAS]; // guarda el estado de las placas | true=libre
+bool barrido[PLACAS + 5]; // guarda el estado de las placas | true=libre
+char placas_estado[PLACAS + 5]; // 'r', 'a', 'n' (que posteriormente se sincroniza)
 
 bool barrer = true;
 unsigned char qid = 0, qdata = 0;
@@ -69,10 +70,16 @@ void placa_estado(unsigned char id, unsigned char estado) {
 void bus_next() {
   // TODO hacer otras cosas
   if(qid > 0) {
-    bus_send(qid, qdata, true);
+    /*
+    Serial.println("ID: ");
+    Serial.print(qid);
+    Serial.println("DATA: ");
+    Serial.println(qdata);
+    */
+    bus_send(qid, qdata, false);
     qid = 0;
     qdata = 0;
-    delay(BUS_TIMEOUT);
+    delay(400);
     return;
   }
 
@@ -106,7 +113,6 @@ void bus_next() {
     } else {
       barrido_last = -1;
     }
-    
   }
 }
 
@@ -211,8 +217,10 @@ void sv_loop() {
           Serial.write(PLACAS_START + i);
           Serial.write((barrido[i] ? 'L' : 'O'));
         }
-    } else if(BUFFER_SERVER[0] == 198) { // toggle barrer
-      barrer = !barrer;
+    } else if(BUFFER_SERVER[0] == 198) { // barrer true
+      barrer = true;
+    } else if(BUFFER_SERVER[0] == 197) { // barrer false
+      barrer = false;
     } else {
       bool handled = false;
       unsigned char id = BUFFER_SERVER[1];

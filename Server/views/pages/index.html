@@ -13,14 +13,31 @@
 			<section class="mdl-layout__tab-panel is-active" id="estacionamiento">
 				<div class="page-content">
 					<h3>Estado actual de cocheras: </h3>
-					<button class="allBulbs" data-active="true">Encender todas las luces</button>
-					<button class="allBulbs" data-active="false">Apagar todas las luces</button>
-					<button class="allFans" data-active="true">Encender todos los ventiladores</button>
-					<button class="allFans" data-active="false">Apagar todos los ventiladores</button>
 					<div class="plano-container">
 						<div class="plano"></div>
 					</div>
 					<div class="guia">
+							<div class="acciones">
+								<h5>Acciones</h5>
+								<div>
+									<h6>Luces</h6>
+									<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored allBulbs" data-active="true">
+										Prender todas las luces
+									</button>
+									<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored allBulbs" data-active="false">
+										Apagar todos las luces
+									</button>
+								</div>
+								<div>
+									<h6>Ventiladores</h6>
+									<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent allFans" data-active="true">
+										Prender todos los ventiladores
+									</button>
+									<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent allFans" data-active="false">
+										Apagar todos los ventiladores
+									</button>
+								</div>
+							</div>
 							<div class="colores">
 								<h5>Guía de colores</h5>								
 									<div class="color" style="background-color:red;"></div><p>Ocupado</p>

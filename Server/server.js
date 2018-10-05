@@ -41,6 +41,26 @@ function syncDatabase() {
 		}
 	});
 }
+function syncReservas() {
+	pool.query("SELECT * FROM reservas WHERE NOW() BETWEEN entrada AND salida", function (error, results, fields) {
+		if (error) throw error;
+		var reservas_estados = {};
+		for(var id in placas_estados)
+			reservas_estados[id] = 'n';
+		
+		if(panico.id != 0) {
+			for(var id in placas_estados)
+				reservas_estados[id] = 'a';
+		} else {
+			for(var i in results) {
+				reservas_estados[results[i].slot] = 'r';
+			}
+		}
+		
+		//console.log(reservas_estados);
+		setTimeout(syncReservas, 5000);
+	});
+}
 
 function syncUtilities() {
 	io.emit('utilities', utilities_estados);
@@ -177,6 +197,7 @@ app.get('/', function(req, res) {
 
 Controller.init();
 syncDatabase();
+syncReservas();
 server.listen(8080, function() {
 	console.log("Running on http://localhost:8080");
 });

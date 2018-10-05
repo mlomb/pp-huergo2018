@@ -137,12 +137,6 @@ select#serial-dato{
 /************************
 *******GUIA PLANO********
 ************************/
-.guia{
-
-}
-.guia .colores{
-
-}
 .guia .colores .color{
 	display:inline-block;
 	width:25px;
@@ -154,8 +148,21 @@ select#serial-dato{
 .guia .colores p{
 	display:inline-block;
 }
-
-
+button.allBulbs, button.allFans {
+	margin-right: 10px;
+}
+.display-text{
+	width: 300px;
+    height: 80px;
+    background-color: #2f2f2f;
+    border: 5px solid red;
+    font-family: 'Segment7Standard';
+    font-weight: normal;
+    font-style: italic;
+    font-size: 50px;
+    color: red;
+    padding-top: 29px;
+}
 
 
 
