@@ -57,7 +57,15 @@ function syncReservas() {
 			}
 		}
 		
-		//console.log(reservas_estados);
+		var buf = [];
+		for(var id in reservas_estados) {
+			buf.push(id);
+			buf.push(reservas_estados[id].charCodeAt(0));
+			console.log(id + ": " + reservas_estados[id].charCodeAt(0));
+		}
+		if(buf.length > 0)
+			Controller.send(buf);
+		
 		setTimeout(syncReservas, 5000);
 	});
 }

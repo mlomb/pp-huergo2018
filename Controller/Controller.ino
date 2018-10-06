@@ -10,12 +10,18 @@ unsigned char last_packet_data = 0;
 
 unsigned char BUFFER_SERVER[BUFFER_SIZE];
 
-int barrido_last = -1;
-bool barrido[PLACAS + 5]; // guarda el estado de las placas | true=libre
-char placas_estado[PLACAS + 5]; // 'r', 'a', 'n' (que posteriormente se sincroniza)
-
 bool barrer = true;
+int barrido_last = -1;
+
 unsigned char qid = 0, qdata = 0;
+
+/*--------------  COCHERAS -------------- */
+struct Cochera {
+  bool last_estado = false; // true=libre
+  unsigned char last_mode = 'x'; // 'r', 'a', 'n'
+
+  unsigned char target_mode = 'n';
+} cocheras[PLACAS + 5];
 
 /*--------------  DISPLAYS -------------- */
 struct Display {
@@ -56,11 +62,11 @@ void setup() {
 void placa_estado(unsigned char id, unsigned char estado) {
     int nro_placa = id - PLACAS_START;
     bool libre = estado == 'L';
-    if(barrido[nro_placa] != libre) {
+    if(cocheras[nro_placa].last_estado != libre) {
       // el estado cambio, actualizamos y notificamos al server
       Serial.write(id);
       Serial.write((libre ? 'L' : 'O'));
-      barrido[nro_placa] = libre;
+      cocheras[nro_placa].last_estado = libre;
     }
 }
 
@@ -96,6 +102,15 @@ void bus_next() {
       }
       displays[i].written = true;
       return;
+    }
+  }
+
+  // plaquetas modos
+  for(int i = 0; i < PLACAS; i++) {
+    Cochera& c = cocheras[i];
+    if(c.last_mode != c.target_mode) {
+      bus_send(i + PLACAS_START, c.target_mode, true);
+      c.last_mode = c.target_mode;
     }
   }
 
@@ -215,7 +230,7 @@ void sv_loop() {
         Serial.write(199);
         for(int i = 0; i < PLACAS; i++) {
           Serial.write(PLACAS_START + i);
-          Serial.write((barrido[i] ? 'L' : 'O'));
+          Serial.write((cocheras[i].last_estado ? 'L' : 'O'));
         }
     } else if(BUFFER_SERVER[0] == 198) { // barrer true
       barrer = true;
@@ -247,9 +262,15 @@ void sv_loop() {
       
       if(!handled) {
         // forward
-        if(BUFFER_SERVER[1] >= 150 && qid == 0) {
-          qid = BUFFER_SERVER[1];
-          qdata = BUFFER_SERVER[0];
+        if(id >= 200) {
+          if(data == 110 || data == 114 || data == 97) {
+            cocheras[id - PLACAS_START].target_mode = data;
+            continue;
+          }
+        }
+        if(id >= 150 && qid == 0) {
+          qid = id;
+          qdata = data;
         }
       }
     }
@@ -265,6 +286,13 @@ void periodic() {
       displays[i].written = false;
     }
     last_displays_refresh = now;
+
+    /*
+    // TEST
+    for(int i = 0 ; i < PLACAS; i++) {
+      cocheras[i].target_mode = cocheras[i].target_mode == 'n' ? 'a' : 'n';
+    }
+    */
   }
   
 }
@@ -274,4 +302,3 @@ void loop() {
   sv_loop();
   bus_loop();
 }
-

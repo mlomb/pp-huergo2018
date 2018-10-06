@@ -40,7 +40,9 @@ function generarEstacionamiento() {
 		$(".plano").append(`
 			<div style="left:` + utils.x + `px;top:` + utils.y + `px;` + (utils.rotate != 0 ? 'transform:rotate('+utils.rotate+'deg)' : '') + `" data-id="` + utils.id + `" class="utilities">
 				<div class="bulb"></div>
-				<div class="fan"></div>
+				<div class="fan-border">
+					<div class="fan"></div>
+				</div>
 			</div>
 		`);
 	}
@@ -66,6 +68,8 @@ function generarEstacionamiento() {
 	
 	$("#stop-panic").click(function() {
 		socket.emit('stop_panic', {});
+		$(".panic-modal").removeClass("active");
+		$(".panico").removeClass("active");
 	});
 }
 
