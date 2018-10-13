@@ -113,7 +113,6 @@ socket.on('displays', function (displays) {
 				</div>
 				<button class="display-update mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Modificar</button>
 			</div>
-			<div class="dislay-text"></div>
 		`);
 		$('div[data-id="' + display_id + '"] input').val(displays[display_id]);
 	}
@@ -142,6 +141,28 @@ $(".cochera").click(function() {
 	var id = $(this).data("id");
 	
 });
+setInterval(function() {
+	$.ajax({
+		url: "/actualClients",
+		dataType: 'json',
+		success: function(result){
+			console.log(result);
+			$('.table-cont table tbody').html("");
+			for(var client of result){
+				$('.table-cont table tbody').append(`
+				<tr>
+					<td>`+client.patente+`</td>
+					<td><img src="`+client.img_patente+`" alt=""></td>
+					<td>`+client.slot+`</td>
+					<td>`+new Date(client.llegada).toLocaleTimeString()+`</td>
+					<td>`+new Date(client.salida).toLocaleTimeString()+`</td>
+				 </tr>
+				`);
+			}
+		}
+    });
+}, 1000);
+
 
 
 $("#serial-send").click(function() {

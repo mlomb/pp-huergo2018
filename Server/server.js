@@ -11,7 +11,14 @@ var Controller = require('./controller.js');
 var buffer = [];
 var placas_estados = {};
 var utilities_estados = {
-	"160": { "bulb": false, "fan": false, "alarm": false }
+	"160": { "bulb": false, "fan": false, "alarm": false },
+	"161": { "bulb": false, "fan": false, "alarm": false },
+	/*
+	"162": { "bulb": false, "fan": false, "alarm": false },
+	"163": { "bulb": false, "fan": false, "alarm": false },
+	"164": { "bulb": false, "fan": false, "alarm": false },
+	"165": { "bulb": false, "fan": false, "alarm": false },
+	*/
 };
 var displays = {
 	"150": "huergo compu"
@@ -42,6 +49,7 @@ function syncDatabase() {
 	});
 }
 function syncReservas() {
+	return;
 	pool.query("SELECT * FROM reservas WHERE NOW() BETWEEN entrada AND salida", function (error, results, fields) {
 		if (error) throw error;
 		var reservas_estados = {};
@@ -203,9 +211,16 @@ app.get('/', function(req, res) {
 	res.render('pages/index.html', {foo:"bar", a:0});
 });
 
+app.get('/actualClients', function(req, res) {
+	pool.query('SELECT * FROM actual_clients', function (error, results, fields) {
+		res.write(JSON.stringify(results));
+		res.end();
+	});
+});
+
 Controller.init();
 syncDatabase();
 syncReservas();
-server.listen(8080, function() {
-	console.log("Running on http://localhost:8080");
+server.listen(8081, function() {
+	console.log("Running on http://localhost:8081");
 });

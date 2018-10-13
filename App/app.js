@@ -106,24 +106,52 @@ app.post('/api/login', function(req,res){
     });
 });
 
+function getMPUrl(preference, callback){
+    mp.preferences.create(preference).then(function (preference) {
+        callback(preference.body.init_point);
+    }).catch(function (error) {
+        console.log(error);
+        callback(null);
+    });
+}
+
 app.post('/api/pay', function(req,res){
-    var entrada = req.body.formEntrada;
+    //CHEQUEAR SI ESTA LOGUEADO
+    var obj = new Object();
+    obj.status = 0;
+    obj.data  = "";
     var salida = req.body.formSalida;
     var slot = req.body.formSlot;
 
-    var precio = 120;
+    var tiempo = salida.split(":");
+    if( tiempo[0] < 00 || tiempo[0] > 24 || tiempo[1] < 00 || tiempo[1] > 60 || (tiempo[0] == 00 && tiempo[1] == 00)){
+        obj.data = "Error con la selección de horas";
+        var jsonObj= JSON.stringify(obj);
+        res.write(jsonObj);
+        res.end();
+        return;
+    }
+    var tiempoPedido = tiempo[0] * 2;
+    if(tiempo[1] != 00){
+        if(tiempo[1] > 30){
+            tiempoPedido+= 2;
+        }else{
+            tiempoPedido+= 1;
+        }
+    }
+    
     switch(slot){
         case "Normal":
-
+            var mediaHora = 50;
         break;
         case "Discapacitado":
-
+            var mediaHora = 40;
         break;
         case "Premium":
-
+            var mediaHora = 60;
         break;
-        
     }
+    var precio = mediaHora * tiempoPedido;
 
     var preference = {
         items: [
@@ -136,17 +164,55 @@ app.post('/api/pay', function(req,res){
         ],
     };
      
-    mp.preferences.create(preference).then(function (preference) {
-        console.log(preference.body.init_point);
-        res.redirect(preference.body.init_point);
+    getMPUrl(preference, function(url) {
+        obj.status = 1;
+        obj.data = url;   
+        var jsonObj= JSON.stringify(obj);
+        res.write(jsonObj);
         res.end();
-    }).catch(function (error) {
-        console.log(error);
     });
 
-    console.log("ASDASDW");
+
 });
 
-app.listen(8081, function(){
-    console.log('Server started on port 8081');
+app.post('/mercadopago', function(req,res){
+    //TOCAR ACA
+    res.writeHead(200);
+    res.end(index);
+
+    var params = url.parse(req.url, true).query;
+    var topic = params.topic;
+
+    switch (topic) {
+        case "payment":
+            mp.get("/v1/payments/"+params.id).
+                then (function (payment_info) {
+                    mp.get ("/merchant_orders/"+payment_info.response.order.id)
+                        .then (processMerchantOrder);
+                });
+        break;
+
+        case "merchant_order":
+            mp.get ("/merchant_orders/"+params.id)
+                .then (processMerchantOrder);
+        break;
+
+        default:
+            processMerchantOrder (null);
+    }
+
+    function processMerchantOrder (merchant_order_info) {
+        if (merchant_order_info == null) {
+            throw "Error obtaining the merchant_order";
+        }
+
+        if (merchant_order_info.status == 200) {
+            console.log (merchant_order_info.response.payments);
+            console.log (merchant_order_info.response.shipments);
+        }
+    }
+});
+
+app.listen(8080, function(){
+    console.log('Server started on port 8080');
 });

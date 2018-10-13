@@ -12,6 +12,10 @@
 	margin: 0px auto;		
 	padding-top: 15px;
 }
+h3{
+	text-align:center;
+    font-family: 'Roboto Condensed';
+}
 /************************
 *********HEADER**********
 ************************/
@@ -155,17 +159,19 @@ select#serial-dato{
     background-image: url(/assets/bulb_on.svg);
 }
 .fan {
-	width: 25px;
-    height: 25px;
-    background-image: url(/assets/fan.svg);
+    width: 30px;
+    height: 30px;
+    background-image: url(/assets/fan.png);
     background-size: cover;
     cursor: pointer;
+    margin-left: -2px;
+    margin-top: -1px;
 }
 .fan.on {
     animation: rotating 1s linear infinite;
 }
 .fan-border{
-	background-image: url(/assets/marco.svg);
+	background-image: url(/assets/marco.png);
     width: 35px;
     height: 35px;
     background-size: cover;
@@ -201,12 +207,48 @@ button.allBulbs, button.allFans {
     color: red;
     padding-top: 29px;
 }
+.guia {
+    width: 930px;
+    margin: 0px auto;
+}
+/************************
+*********TABLAS**********
+************************/
 
+#info-table td {
+    line-height: 2;
+    border: 1px solid;
+    font-family: 'Montserrat';
+	font-weight: 600;
+}
+#info-table table {
+    border-collapse: collapse;
+    border: 2px solid black;
+    margin: 0px auto;
+    width: 935px;
+    text-align: center;
+}
 
-
-
-
-
+#info-table tr {
+    border: 1px solid;
+}
+#info-table th {
+    line-height: 2.5;
+    font-family: 'Roboto Condensed';
+	background-color: rgb(63,81,181);
+    color: white;
+	font-size: 18px;
+}
+.table-cont td img {
+    width: 200px;
+}
+/************************
+*********DISPLAY*********
+************************/
+div#displays-container {
+    width: 935px;
+    margin: 0px auto;
+}
 @keyframes rotating {
     from{
         transform: rotate(0deg);

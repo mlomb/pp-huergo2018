@@ -44,11 +44,24 @@ void initDisplay(unsigned char id, int length, Display& d) {
 Display displays[NUM_DISPLAYS];
 unsigned long last_displays_refresh = 0;
 
+/*--------------  NUMERITOS -------------- */
+struct Numerito {
+  int start, end;
+  int num;
+  int last_num;
+};
+
+#define NUM_NUMERITOS 1
+Numerito numeritos[NUM_NUMERITOS];
+const unsigned char NUMERITOS_START = 170;
+
 void setup() {
   const char* msg1 = "abcdefghi";
   initDisplay(150, 16, displays[0]);
   memcpy(displays[0].text, msg1, strlen(msg1));
   displays[0].write_pointer = strlen(msg1);
+
+  numeritos[0] = { 200, 207 };
   
   // Serial = Arduino y server
   Serial.begin(9600);
@@ -105,12 +118,27 @@ void bus_next() {
     }
   }
 
+  for(int i = 0; i < NUM_NUMERITOS; i++) {
+    numeritos[i].num = 0;
+    for(int id = numeritos[i].start - PLACAS_START; id <= numeritos[i].end - PLACAS_START; id++) {
+      if(cocheras[id].last_mode == 'n' && cocheras[id].last_estado)
+        numeritos[i].num++;
+    }
+    if(numeritos[i].num != numeritos[i].last_num) {
+      bus_send(i + NUMERITOS_START, (unsigned char)numeritos[i].num, false);
+      numeritos[i].last_num = numeritos[i].num;
+      delay(80);
+    }
+  }
+
   // plaquetas modos
   for(int i = 0; i < PLACAS; i++) {
     Cochera& c = cocheras[i];
     if(c.last_mode != c.target_mode) {
       bus_send(i + PLACAS_START, c.target_mode, true);
       c.last_mode = c.target_mode;
+      delay(80);
+      return;
     }
   }
 
@@ -285,8 +313,11 @@ void periodic() {
       displays[i].write_pointer = 0;
       displays[i].written = false;
     }
-    last_displays_refresh = now;
+    for(int i = 0; i < NUM_NUMERITOS; i++) {
+      numeritos[i].last_num = -1;
+    }
 
+    last_displays_refresh = now;
     /*
     // TEST
     for(int i = 0 ; i < PLACAS; i++) {
@@ -294,7 +325,6 @@ void periodic() {
     }
     */
   }
-  
 }
 
 void loop() {

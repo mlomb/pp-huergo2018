@@ -52,6 +52,26 @@
 					</div>
 				</div>
 			</section>
+			<section class="mdl-layout__tab-panel" id="info-table">
+				<div class="page-content">
+					<h3>Información de los clientes actuales:</h3>
+					<div class="table-cont">
+						<table>
+							<thead>
+								<tr>
+									<th>Patente</th>
+									<th>Imagen</th>
+									<th>Cochera</th>
+									<th>Llegada</th>
+									<th>Salida</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</section>
 			<section class="mdl-layout__tab-panel" id="displays">
 				<div class="page-content">
 					<h3>Displays</h3>
@@ -76,10 +96,17 @@
 								<label>ID</label>
 								<select id="serial-id">
 									<optgroup label="Utilities">
-										<option value="160">Utilities #1</option>
+										<% for(var i = 160; i <= 165; i++){ %>
+											<option value="<%= i %>">Utilities #<%= i %></option>
+										<% } %>
 									</optgroup>
 									<optgroup label="Displays">
 										<option value="150">Display #1</option>
+									</optgroup>
+									<optgroup label="Numeritos">
+										<% for(var i = 170; i <= 170; i++){ %>
+											<option value="<%= i %>">#<%= i %></option>
+										<% } %>
 									</optgroup>
 									<optgroup label="Placas">
 										<% for(var i = 200; i < 240; i++){ %>
@@ -115,6 +142,13 @@
 										for(var i = 0; i < l.length; i++){
 										%>
 											<option value="<%= l.charCodeAt(i) %>">'<%= l[i] %>'</option>
+										<% } %>
+									</optgroup>
+									<optgroup label="Decimales">
+										<% 
+										for(var i = 0; i <= 99; i++){
+										%>
+											<option value="<%= i %>"><%= i %></option>
 										<% } %>
 									</optgroup>
 								</select>

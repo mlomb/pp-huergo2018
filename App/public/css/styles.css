@@ -519,26 +519,123 @@ main.mdl-layout__content {
      your background is light. */
   color: white;
 }
+/*         ----APP MAIN----          */
 #asdf{
     position: absolute;
     width: 100%;
     height: 30%;
+}
+.textcontent{
+    height: 350px;
+    width: 70vw;
+    margin: 200px auto;
+}
+#nextbtncontainer {
+    width: 40px;
+    display: inline-block;
+    height: 40px;
+    float: right;
+    vertical-align: middle;
+    border-radius: 50%;
+    text-align: center;
+    border: 2px solid #cc771c;
+    margin: auto;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+}
+.appbtnsiguiente{
+    background-image: url(/images/Extras/right-chevron.png);
+    background-size: cover;
+    background-position: center;
+    width: 25px;
+    height: 25px;
+    margin: 6px 3px 0px auto;
+}
+#AppMainContainer{
+    display: none;
+}
+/*           STEP 1           */
+.AppPasoUnoContainer{
+    
+}
+.AppStep1Text{
+    
+}
+.AppStep1Title{
+    font-family: 'Montserrat', sans-serif;
+    color: #cc771c;
+    font-size: 40px;
+    font-weight: 600;
+    letter-spacing: -.05em;
+    margin: 24px 0;
+    margin-top: 60px;
+    line-height: 40px;
+}
+.AppStep1Subtitle{
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -.05em;
+    margin: 24px 0;
+    margin-top: 60px;
 }
 
 
 
 
 
+/* END of STEP 1 */ 
+.footericons{
+    height: 40px;
+    width: 100vw;
+    background-color: white;
+    position: absolute;
+    bottom: 0px;
 
+}
+#test{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: red;
+}
+.cocherastxt{
+    color: #cc771c;
+    font-size: 120px;
+    font-weight: 600;
+    letter-spacing: -.005em;
+    font-family: 'Segment7Standard'; 
+    font-weight: normal; 
+    font-style: italic; 
+}
+.cocheraslibrestxt{
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: -.005em;
+    margin: 24px 0;
+    margin-top: 60px;
+    line-height: 40px;
+}
 
-
-
-
-
-
-
-
-
+#idorangebtn{
+    border: 2px solid #cc771c!important;
+    padding: 8px 16px;
+    margin-top: 50px;
+    cursor: pointer;
+}
+#idorangebtn:hover {
+    box-shadow: 0 8px 16px 0 rgba(204, 119, 28, 0.11), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+/*         ----End of APP MAIN----          */
+.cerrarsesion{
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
 /* ------------------ end app --------------------*/
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (max-width: 1200px) {
@@ -565,7 +662,9 @@ main.mdl-layout__content {
     .libresContainer p {
         margin-top: 80px;
     }
+
 } 
+
 /* Medium devices (1224px and down) */
 @media (max-width: 1224px) { 
     
@@ -587,6 +686,7 @@ main.mdl-layout__content {
         padding: 6px 12px;
         margin-top: 40px;
     }
+
 } 
 /* Extra small devices (phones 480px and down) */
 @media (max-width: 480px) {
@@ -613,6 +713,7 @@ main.mdl-layout__content {
         padding: 6px 12px;
     }
 
+    
 } 
 
 /* Large devices (laptops/desktops, 992px and up) */
@@ -643,3 +744,11 @@ main.mdl-layout__content {
 @media only screen and (max-width: 300px) {
     
 } 
+a:not([href]):not([tabindex]) {
+    color: white;
+    text-decoration: none;
+}
+a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover {
+    color: white;
+    text-decoration: none;
+}
