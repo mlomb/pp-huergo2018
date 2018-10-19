@@ -25,7 +25,7 @@ function requestSession(idToken) {
     if(firebase.auth().currentUser) {
         firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
             console.log("Login...");
-            $('#loadingScreen').css('display','flex');
+            $('#loadingScreenAuth').css('display','flex');
             $.ajax({
                 url: '/api/login/',
                 method: 'POST',

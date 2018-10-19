@@ -488,7 +488,7 @@ header .mdl-layout__drawer-button{
         LOADING
 --------------------*/
 
-#loadingScreen{
+#loadingScreen, #loadingScreenAuth{
     position: absolute;
     top: 0;
     left: 0;
@@ -502,7 +502,7 @@ header .mdl-layout__drawer-button{
     z-index: 100000000;
     display: none;
 }
-#loadingScreen img{
+#loadingScreen img, #loadingScreenAuth img{
     width: 150px;
     height: 150px;    
 }
@@ -528,7 +528,7 @@ main.mdl-layout__content {
 .textcontent{
     height: 350px;
     width: 70vw;
-    margin: 200px auto;
+    margin: 200px auto auto auto;
 }
 #nextbtncontainer {
     width: 40px;
@@ -544,6 +544,20 @@ main.mdl-layout__content {
     right: 10px;
     top: 50%;
 }
+#prevbtncontainer {
+    width: 40px;
+    display: inline-block;
+    height: 40px;
+    float: left;
+    vertical-align: middle;
+    border-radius: 50%;
+    text-align: center;
+    border: 2px solid #cc771c;
+    margin: auto;
+    position: absolute;
+    left: 10px;
+    top: 50%;
+}
 .appbtnsiguiente{
     background-image: url(/images/Extras/right-chevron.png);
     background-size: cover;
@@ -552,13 +566,27 @@ main.mdl-layout__content {
     height: 25px;
     margin: 6px 3px 0px auto;
 }
+.appbtnanterior{
+    background-image: url(/images/Extras/left-chevron.png);
+    background-size: cover;
+    background-position: center;
+    width: 25px;
+    height: 25px;
+    margin: 6px 8px 0px auto; 
+}
+/**** steps container ********/
 #AppMainContainer{
     display: none;
 }
-/*           STEP 1           */
-.AppPasoUnoContainer{
-    
+#AppPasoUnoContainer{
+    display: none;
 }
+#AppPasoDosContainer{
+    display: block;
+}
+/*****************************/
+/*           STEP 1           */
+
 .AppStep1Text{
     
 }
@@ -581,12 +609,31 @@ main.mdl-layout__content {
     margin: 24px 0;
     margin-top: 60px;
 }
-
-
-
-
-
 /* END of STEP 1 */ 
+/*  step 2 */
+.optTipoResContainer{
+    width: 100vw;
+    height: 40px;
+    background-color: red;
+    margin-top: 30px;
+}
+.ResRightContainer{
+    width: 70vw;
+    height: 200px;
+    background-color: blue;
+    margin: 30px auto auto auto;
+    display: flex;
+}
+.optResImage{
+    width: 80%;
+    height: 80%;
+    background-color: azure;
+    margin: auto;
+}
+.optResText{
+    
+}
+/* end 2 */
 .footericons{
     height: 40px;
     width: 100vw;

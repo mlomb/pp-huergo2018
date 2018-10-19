@@ -88,13 +88,16 @@ app.post('/api/login', function(req,res){
     var idToken = req.body.token;
 
     admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
+        console.log(decodedToken);
         var uid = decodedToken.uid;
+        var name = decodedToken.name;
+        var email = decodedToken.email;
         
         const expiresIn = 60 * 60 * 24 * 5 * 1000;
         admin.auth().createSessionCookie(idToken, {expiresIn}).then((sessionCookie) => {
             const options = {maxAge: expiresIn, httpOnly: true, secure: false};
             res.cookie('session', sessionCookie, options);
-            doQuery("INSERT IGNORE INTO users (id) VALUES (?)", [uid] , function (result) {
+            doQuery("INSERT IGNORE INTO users (id,nombre,email,password) VALUES (?,?,?,'')", [uid,name,email] , function (result) {
                 console.log("Usuario inició sesión: " + uid);
                 res.end(JSON.stringify({ success: true }));
             });
@@ -152,7 +155,7 @@ app.post('/api/pay', function(req,res){
         break;
     }
     var precio = mediaHora * tiempoPedido;
-
+    precio = 1;
     var preference = {
         items: [
           item = {
@@ -176,10 +179,24 @@ app.post('/api/pay', function(req,res){
 });
 
 app.post('/mercadopago', function(req,res){
-    //TOCAR ACA
     res.writeHead(200);
-    res.end(index);
+	res.end();
 
+	var params = url.parse(req.url, true).query;
+
+	mp.getPayment (params.id, function (err, data){
+		if (err) {
+			console.log (err);
+		} else {
+			console.log (data);
+		}
+    });
+    /*
+    res.writeHead(200);
+    res.end();
+
+    console.log(req);
+    
     var params = url.parse(req.url, true).query;
     var topic = params.topic;
 
@@ -207,10 +224,32 @@ app.post('/mercadopago', function(req,res){
         }
 
         if (merchant_order_info.status == 200) {
+            ----COMENTARIO
+            $paid_amount = 0;
+
+            foreach ($merchant_order_info["response"]["payments"] as  $payment) {
+                if ($payment['status'] == 'approved'){
+                    $paid_amount += $payment['transaction_amount'];
+                }	
+            }
+        
+            if($paid_amount >= $merchant_order_info["response"]["total_amount"]){
+                if(count($merchant_order_info["response"]["shipments"]) > 0) { // The merchant_order has shipments
+                    if($merchant_order_info["response"]["shipments"][0]["status"] == "ready_to_ship"){
+                        print_r("Totally paid. Print the label and release your item.");
+                    }
+                } else { // The merchant_order don't has any shipments
+                    print_r("Totally paid. Release your item.");
+                }
+            } else {
+                print_r("Not paid yet. Do not release your item.");
+            }
+            ----
             console.log (merchant_order_info.response.payments);
             console.log (merchant_order_info.response.shipments);
         }
     }
+    */
 });
 
 app.listen(8080, function(){

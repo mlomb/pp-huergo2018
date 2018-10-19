@@ -88,6 +88,20 @@ var socket = io();
 	});
 */
 
+socket.on('alert', function (data) {
+	alert(data);
+});
+
+socket.on('input_patente', function (data) {
+	var result = prompt("Un auto ingresó y no se reconoció la patente. Por favor ingresar a mano: (ENTER para cancelar)");
+	if(result.length == 0) {
+		//
+	} else {
+		data.patente = result;
+		socket.emit('input_patente_resultado', data);
+	}
+});
+
 socket.on('serial', function (data) {
 	$(".serie-rows").append('<div class="row '+(data.direction == 'sended' ? 'sale' : 'entra')+'"><i class="material-icons">arrow_'+(data.direction == 'sended' ? 'back' : 'forward')+'</i>'+data.data+'</div>');
 	if($(".serie-rows .row").length > 200)
@@ -146,7 +160,6 @@ setInterval(function() {
 		url: "/actualClients",
 		dataType: 'json',
 		success: function(result){
-			console.log(result);
 			$('.table-cont table tbody').html("");
 			for(var client of result){
 				$('.table-cont table tbody').append(`

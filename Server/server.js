@@ -8,6 +8,7 @@ var fs      = require('fs'),
 var datos = require('./../datos.json');
 
 var Controller = require('./controller.js');
+var Recognition = require('./recognition.js');
 var buffer = [];
 var placas_estados = {};
 var utilities_estados = {
@@ -205,6 +206,36 @@ io.on('connection', function (socket) {
 		panico.id = 0;
 		syncUtilities();
 	});
+	
+	/* -------- */
+	function fotoResult(resultado) {
+		console.log("Ingresando patente: " + resultado.patente);
+		pool.query('INSERT INTO actual_clients (patente, img_patente, llegada) VALUES (?, ?, NOW())', [resultado.patente, "/patentes-imgs/" + resultado.image], function (error, results, fields) {
+			if (error) throw error;
+		});
+	}
+	var sacando_foto = false;
+	socket.on('testfoto', function (active) {
+		if(sacando_foto) {
+			socket.emit('alert', "Ya se esta sacando una foto papa, espera un poco.");
+			return;
+		}
+		socket.emit('alert', "Sacando foto");
+		sacando_foto = true;
+
+		Recognition.getPatente(function(resultado) {
+			sacando_foto = false;
+			if(resultado.patente == null) {
+				console.log("No se pudo reconocer la patente.");
+				//socket.emit('alert', "No se pudo reconocer la patente.");
+				socket.emit('input_patente', resultado);
+			} else {
+				fotoResult(resultado);
+			}
+		});
+	});
+	socket.on('input_patente_resultado', fotoResult);
+	/* -------- */
 });
 
 app.get('/', function(req, res) {

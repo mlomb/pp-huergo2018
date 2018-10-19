@@ -49,8 +49,8 @@
               <p class="cocheraslibrestxt">Cocheras <br> Libres</p>
               <a class="orangeborderbtn" id="idorangebtn" goto="reservationPage">Reservar ya!</a>
           </div>
-          <div id="nextbtncontainer">
-              <div class="appbtnsiguiente" onclick="AppGotoTwo()">
+          <div id="nextbtncontainer" onclick="AppGotoOne()">
+              <div class="appbtnsiguiente">
 
               </div>
           </div>
@@ -60,9 +60,35 @@
               <p class="AppStep1Title"> ~ Paso 1  ~</p>
               <p class="AppStep1Subtitle">Hora de llegada</p>
           </div>
-          <div id="nextbtncontainer">
-              <div class="appbtnsiguiente" onclick="AppGotoThree()"></div>
+          <div id="prevbtncontainer" onclick="AppGotoMain()">
+              <div class="appbtnanterior" ></div>
           </div>
+          <div id="nextbtncontainer" onclick="AppGotoTwo()">
+              <div class="appbtnsiguiente" ></div>
+          </div>
+      </div>
+      <div id="AppPasoDosContainer">
+          <div class="AppStep1Text">
+              <p class="AppStep1Title"> ~ Paso 2  ~</p>
+              <p class="AppStep1Subtitle">Seleccioná</p>
+          </div>
+          <div id="prevbtncontainer" onclick="AppGotoOne()">
+              <div class="appbtnanterior" ></div>
+          </div>
+          <div id="nextbtncontainer" onclick="AppGotoThree()">
+              <div class="appbtnsiguiente" ></div>
+          </div>
+          
+          <div class="optTipoResContainer">
+              <h3>Normal</h3>
+              <h3>Premium</h3>
+              <h3>Discapacitado</h3>
+          </div>
+          <div class="ResRightContainer">
+              <div class="optResImage"></div>
+              <div class="optResText"></div>
+          </div>
+          
       </div>
          <!--
           <div class="footericons">
