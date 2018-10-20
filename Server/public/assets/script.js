@@ -149,9 +149,7 @@ socket.on('utilities', function (utilities) {
 });
 	
 socket.on('panico', function (panico) {
-	if(panico.id == 0) {
-		
-	}
+	$(".panic-modal").toggleClass('show', panico.id != 0);
 });
 
 $(".cochera").click(function() {
