@@ -29,11 +29,11 @@ function generarEstacionamiento() {
 		{ x: 260, y: 10, id: 160, rotate: 0 },
 		{ x: 583, y: 10, id: 161, rotate: 0 },
 		
-		{ x: 853, y: 200, id: 161, rotate: 90 },
-		{ x: 853, y: 480, id: 161, rotate: 90 },
+		{ x: 853, y: 200, id: 162, rotate: 90 },
+		{ x: 853, y: 480, id: 163, rotate: 90 },
 		
-		{ x: 260, y: 648, id: 161, rotate: 0 },
-		{ x: 583, y: 648, id: 161, rotate: 0 },
+		{ x: 260, y: 648, id: 164, rotate: 0 },
+		{ x: 583, y: 648, id: 165, rotate: 0 },
 	];
 	
 	for(var utils of utilities) {
@@ -53,7 +53,7 @@ function generarEstacionamiento() {
 	});
 	
 	$(".fan").click(function() {
-		var id = $(this).parent().data("id");
+		var id = $(this).parent().parent().data("id");
 		socket.emit('fan', { id: id });
 	});
 	
@@ -126,14 +126,17 @@ socket.on('displays', function (displays) {
 					<input class="mdl-textfield__input" type="text">
 				</div>
 				<button class="display-update mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Modificar</button>
+				<div class="display-sample"></div>
 			</div>
 		`);
 		$('div[data-id="' + display_id + '"] input').val(displays[display_id]);
+		//$('div[data-id="' + display_id + '"] .display-sample').html(displays[display_id]);
 	}
 	$(".display-update").click(function() {
 		var id = $(this).parent().data("id");
 		var txt = $(this).parent().find("input").val();
 		socket.emit('update_display', { id: id, text: txt });
+		//$('div[data-id="' + display_id + '"] .display-sample').html(txt);
 	});
 });
 
@@ -141,10 +144,10 @@ socket.on('utilities', function (utilities) {
 	for(var u_id in utilities) {
 		var a = $('.utilities[data-id="' + u_id + '"]');
 		a.children(".bulb").toggleClass("on", utilities[u_id]["bulb"]);
-		a.children(".fan").toggleClass("on", utilities[u_id]["fan"]);
+		a.children(".fan-border").children(".fan").toggleClass("on", utilities[u_id]["fan"]);
 	}
 });
-
+	
 socket.on('panico', function (panico) {
 	if(panico.id == 0) {
 		
@@ -165,7 +168,7 @@ setInterval(function() {
 				$('.table-cont table tbody').append(`
 				<tr>
 					<td>`+client.patente+`</td>
-					<td><img src="`+client.img_patente+`" alt=""></td>
+					<td><a href=`+client.img_patente+` target="_blank"><img src="`+client.img_patente+`" alt=""></a></td>
 					<td>`+client.slot+`</td>
 					<td>`+new Date(client.llegada).toLocaleTimeString()+`</td>
 					<td>`+new Date(client.salida).toLocaleTimeString()+`</td>

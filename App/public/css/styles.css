@@ -576,13 +576,13 @@ main.mdl-layout__content {
 }
 /**** steps container ********/
 #AppMainContainer{
-    display: none;
+    display: block;
 }
 #AppPasoUnoContainer{
     display: none;
 }
 #AppPasoDosContainer{
-    display: block;
+    display: none;
 }
 /*****************************/
 /*           STEP 1           */
@@ -615,20 +615,39 @@ main.mdl-layout__content {
     width: 100vw;
     height: 40px;
     background-color: red;
-    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.optTipoResContainer h3 {
+    font-size: 15px;
+    color: white;
+    font-weight: 500!important;
+    margin-top: 0px!important;
+    margin: 15px;
+/*
+    -webkit-transition: 2s all ease;
+    -o-transition: 2s all ease;
+    transition: 2s all ease;
+*/
+}
+.active{
+    color: orange;
+    font-weight: 800!important;
 }
 .ResRightContainer{
     width: 70vw;
     height: 200px;
-    background-color: blue;
+    background-color: #ff8400;
     margin: 30px auto auto auto;
     display: flex;
 }
 .optResImage{
-    width: 80%;
-    height: 80%;
+    width: 97%;
+    height: 97%;
     background-color: azure;
     margin: auto;
+    background-image: url(/images/discapacitados.jpg);
 }
 .optResText{
     

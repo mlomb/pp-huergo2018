@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const admin = require('firebase-admin');
 const mysql = require('mysql');
+const url = require("url");
 const mp = require('mercadopago');
 
 var datos = require('./../datos.json');
@@ -145,12 +146,36 @@ app.post('/api/pay', function(req,res){
     
     switch(slot){
         case "Normal":
-            var mediaHora = 50;
+            doQuery("SELECT * FROM slots WHERE id NOT IN (200,201,202,203,204,205,206,207,220,221,222,223,224,225,226,227) AND state = 'LIBRE'", [] , function (result) {
+				if(result.length == 0){
+					obj.data = "No hay lugares disponibles para reservar en este momento. Por favor vuelva a intentar mas tarde.";
+					var jsonObj= JSON.stringify(obj);
+					res.write(jsonObj);
+					res.end();
+				}
+			});
+			var mediaHora = 50;
         break;
         case "Discapacitado":
+			doQuery("SELECT * FROM slots WHERE id IN (200,201,202,203,220,221,222,223) AND state = 'LIBRE'", [] , function (result) {
+				if(result.length == 0){
+					obj.data = "No hay lugares de discapacitado disponibles para reservar en este momento. Por favor vuelva a intentar mas tarde.";
+					var jsonObj= JSON.stringify(obj);
+					res.write(jsonObj);
+					res.end();
+				}
+			});
             var mediaHora = 40;
         break;
         case "Premium":
+			doQuery("SELECT * FROM slots WHERE id NOT IN (204,205,206,207,224,225,226,227) AND state = 'LIBRE'", [] , function (result) {
+				if(result.length == 0){
+					obj.data = "No hay lugares premium disponibles para reservar en este momento. Por favor vuelva a intentar mas tarde.";
+					var jsonObj= JSON.stringify(obj);
+					res.write(jsonObj);
+					res.end();
+				}
+			});
             var mediaHora = 60;
         break;
     }
@@ -174,30 +199,20 @@ app.post('/api/pay', function(req,res){
         res.write(jsonObj);
         res.end();
     });
-
-
+	/*
+	doQuery("INSERT INTO reservas (id,id_cliente,id_pago,patente,entrada,salida,slot,pagado) VALUES ('',?,?,'',?,?,?,0)", [] , function (result) {
+        
+    });*/
 });
 
 app.post('/mercadopago', function(req,res){
     res.writeHead(200);
 	res.end();
-
+	
+	//console.log(req);
+	
 	var params = url.parse(req.url, true).query;
-
-	mp.getPayment (params.id, function (err, data){
-		if (err) {
-			console.log (err);
-		} else {
-			console.log (data);
-		}
-    });
-    /*
-    res.writeHead(200);
-    res.end();
-
-    console.log(req);
     
-    var params = url.parse(req.url, true).query;
     var topic = params.topic;
 
     switch (topic) {
@@ -224,7 +239,8 @@ app.post('/mercadopago', function(req,res){
         }
 
         if (merchant_order_info.status == 200) {
-            ----COMENTARIO
+			/*
+			----COMENTARIO
             $paid_amount = 0;
 
             foreach ($merchant_order_info["response"]["payments"] as  $payment) {
@@ -245,11 +261,11 @@ app.post('/mercadopago', function(req,res){
                 print_r("Not paid yet. Do not release your item.");
             }
             ----
+			*/
             console.log (merchant_order_info.response.payments);
             console.log (merchant_order_info.response.shipments);
         }
     }
-    */
 });
 
 app.listen(8080, function(){

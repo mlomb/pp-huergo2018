@@ -14,13 +14,12 @@ var placas_estados = {};
 var utilities_estados = {
 	"160": { "bulb": false, "fan": false, "alarm": false },
 	"161": { "bulb": false, "fan": false, "alarm": false },
-	/*
 	"162": { "bulb": false, "fan": false, "alarm": false },
 	"163": { "bulb": false, "fan": false, "alarm": false },
 	"164": { "bulb": false, "fan": false, "alarm": false },
-	"165": { "bulb": false, "fan": false, "alarm": false },
-	*/
+	"165": { "bulb": false, "fan": false, "alarm": false }
 };
+var utilities_estados_last = {};
 var displays = {
 	"150": "huergo compu"
 };
@@ -50,7 +49,7 @@ function syncDatabase() {
 	});
 }
 function syncReservas() {
-	return;
+	//return;
 	pool.query("SELECT * FROM reservas WHERE NOW() BETWEEN entrada AND salida", function (error, results, fields) {
 		if (error) throw error;
 		var reservas_estados = {};
@@ -80,12 +79,27 @@ function syncReservas() {
 }
 
 function syncUtilities() {
+	console.log(utilities_estados);
 	io.emit('utilities', utilities_estados);
 	io.emit('panico', panico);
 	for(var id in utilities_estados) {
-		Controller.send([ id, utilities_estados[id]["bulb"] ? 10 : 11 ]);
-		Controller.send([ id, utilities_estados[id]["fan"] ? 20 : 21 ]);
-		Controller.send([ id, utilities_estados[id]["alarm"] ? 30 : 31 ]);
+		if(!(id in utilities_estados_last)) {
+			utilities_estados_last[id] = {};
+		}
+		var es = ["bulb", "fan", "alarm"];
+		var nms = [10, 20, 30];
+		for(var i in es) {
+			var e = es[i];
+			var n = nms[i];
+			if(!(e in utilities_estados_last[id]))
+				utilities_estados_last[id][e] = -1;
+			if(utilities_estados_last[id][e] != utilities_estados[id][e]) {
+				Controller.send([ id, utilities_estados[id][e] ? n : n+1 ]);
+				utilities_estados_last[id][e] = utilities_estados[id][e];
+			}
+		}
+		//Controller.send([ id, utilities_estados[id]["fan"] ? 20 : 21 ]);
+		//Controller.send([ id, utilities_estados[id]["alarm"] ? 30 : 31 ]);
 	}
 }
 function syncThings() {

@@ -249,6 +249,21 @@ div#displays-container {
     width: 935px;
     margin: 0px auto;
 }
+.display-sample {
+    height: 62px;
+    width: 432px;
+    background-color: black;
+    border: 3px solid grey;
+    color: red;
+    font-size: 25px;
+    padding-top: 17px;
+    padding-left: 5px;
+    font-family: 'Graduate', cursive;
+    font-weight: normal;
+    font-style: italic;
+
+}
+
 @keyframes rotating {
     from{
         transform: rotate(0deg);
