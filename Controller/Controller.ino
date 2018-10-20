@@ -68,6 +68,22 @@ void setup() {
   // Serial1 = Arduino y maqueta
   Serial1.begin(9600);
 
+  // Desreservar todas las placas al principio
+  for(int i = 0; i < PLACAS; i++) {
+    bus_send(i + PLACAS_START, 'n', false);
+    delay(80);
+  }
+
+  // luces prendidas y lo demas apagado
+  for(int i = 0; i < 6; i++) {
+    bus_send(i + 160, 10, false);
+    delay(80);
+    bus_send(i + 160, 21, false);
+    delay(80);
+    bus_send(i + 160, 31, false);
+    delay(80);
+  }
+
   
   Serial.write(199); // INIT
 }
@@ -150,7 +166,7 @@ void bus_next() {
     if(barrido_last <= PLACAS) {
       // cocheras
       bus_send(barrido_last + PLACAS_START, 'e', true);
-    } else if(barrido_last <= PLACAS + 1) { // +1 cantidad de utilities
+    } else if(barrido_last <= PLACAS + 6) { // +1 cantidad de utilities
       // botones de panico
       bus_send(barrido_last - PLACAS - 1 + 160, '(', true);
     } else {
@@ -332,3 +348,4 @@ void loop() {
   sv_loop();
   bus_loop();
 }
+
