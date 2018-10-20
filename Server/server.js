@@ -184,6 +184,7 @@ app.engine('html', require('ejs').renderFile);
 io.on('connection', function (socket) {
 	// un usuario se conecto por WebSockets
 	io.emit('estado', placas_estados);
+	io.emit('panico', panico);
 	io.emit('utilities', utilities_estados);
 	io.emit('displays', displays);
 
