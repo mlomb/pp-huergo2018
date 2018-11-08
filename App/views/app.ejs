@@ -1,14 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
-    <script type="text/javascript" src="/js/functions.js"></script>
-           <!-- JQuery -->
+        <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../js/functions.js"></script>
+        <!-- Time Picker Jquery -->
+    <link rel="stylesheet" href="../timepicker/stylesheets/wickedpicker.css">
+    <script type="text/javascript" src="../timepicker/src/wickedpicker.js"></script>
+    
+    <script type="text/javascript">
+        function codeAddress() { discapacitadoClick();}
+        window.onload = codeAddress;
+    </script>
         <!--segments 7-->
     <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/segment7" type="text/css"/>
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
@@ -36,29 +44,79 @@
       <div class="mdl-layout__drawer">
         <span class="mdl-layout-title">Nombre de perfil</span>
         <nav class="mdl-navigation">
-          <a class="mdl-navigation__link" href="">Editar perfil</a>
-          <a class="mdl-navigation__link" href="">Reservas</a>
+            <a class="mdl-navigation__link" href="">LogIn</a>
+            <a class="mdl-navigation__link" href="">Reservas</a>
 
           <a class="mdl-navigation__link cerrarsesion" href="">Cerrar sesión</a>
         </nav>
       </div>
       <main class="mdl-layout__content">
+      <div class="appOverlay"></div>
+      <div class="bottomBlack"></div>
+      
+      
       <div id="AppMainContainer">
           <div class="textcontent">
               <p class="cocherastxt">72</p>
               <p class="cocheraslibrestxt">Cocheras <br> Libres</p>
-              <a class="orangeborderbtn" id="idorangebtn" goto="reservationPage">Reservar ya!</a>
-          </div>
-          <div id="nextbtncontainer" onclick="AppGotoOne()">
-              <div class="appbtnsiguiente">
-
-              </div>
+              <a class="orangeborderbtn" id="idorangebtn" goto="reservationPage" onclick="AppGotoOne()">Reservar ya!</a>
           </div>
       </div>
+      
+      
+      <div id="AppInicioSesionContainer">
+          <div class="AppStep1Text">
+              <p class="AppStep1Title" id="registerTitle"> ~ Inicie sesión! ~</p>
+              <p class="AppRegisterSubtitle">Obtén tu cochera ya!</p>
+          </div>  
+          <section id="logInPage">
+              <div id="loadingScreenAuth">
+                  <img src="/images/loading.gif" alt="Loading gif">
+              </div>
+              <div class="login-box">
+                  <form action="login" method="POST">
+                      <div>
+                          <i class="fas fa-user"></i>
+                          <label for="user">E-Mail</label>
+                      </div>
+                      <input type="text" id="user" name="email">
+                      <div>
+                          <i class="fas fa-key"></i>
+                          <label for="pass">Contraseña</label>
+                      </div>
+                      <input type="password" id="pass" name="pass">
+                      <button type="submit">Ingresar</button>
+                      <div class="socialContainer">
+                          <button type="button" id="google-login">
+                              <i class="fab fa-google"></i>
+                          </button>
+                          <button type="button" id="facebook-login">
+                              <i class="fab fa-facebook"></i>
+                          </button>
+                          <button type="button" id="twitter-login">
+                              <i class="fab fa-twitter"></i>
+                          </button>
+                          <button type="button" id="github-login">
+                              <i class="fab fa-github"></i>
+                          </button>
+                      </div>
+                  </form>
+              </div>
+          </section>
+          <div id="InicioSesionNextbtncontainer" onclick="AppGotoMain()">
+              <div class="appInicioSesionBtnNext" ></div>
+          </div>    
+      </div>
+      
+      
       <div id="AppPasoUnoContainer">
           <div class="AppStep1Text">
               <p class="AppStep1Title"> ~ Paso 1  ~</p>
               <p class="AppStep1Subtitle">Hora de llegada</p>
+              <input type="text" class="timepicker" id="timeOne">
+              
+              
+              
           </div>
           <div id="prevbtncontainer" onclick="AppGotoMain()">
               <div class="appbtnanterior" ></div>
@@ -70,7 +128,7 @@
       <div id="AppPasoDosContainer">
           <div class="AppStep1Text">
               <p class="AppStep1Title"> ~ Paso 2  ~</p>
-              <p class="AppStep1Subtitle">Seleccioná</p>
+              <p class="AppStep2Subtitle">Seleccioná</p>
           </div>
           <div id="prevbtncontainer" onclick="AppGotoOne()">
               <div class="appbtnanterior" ></div>
@@ -82,13 +140,13 @@
           <div class="optTipoResContainer">
               <h3 id="normalbtn" onclick="normalClick()">Normal</h3>
               <h3 id="discapacitadobtn" onclick="discapacitadoClick()">Discapacitado</h3>
-              <h3 id=""premiumbtn onclick="premiumClick()">Premium</h3>
+              <h3 id="premiumbtn" onclick="premiumClick()">Premium</h3>
           </div>
           <div class="ResRightContainer">
-              <div class="optResImage"></div>
-              <div class="optResText"></div>
+              <div class="optResImage" onclick="Res1Click()"></div>
+              <div class="optResImage2" onclick="Res2Click()"></div>
+              <div class="optResImage3" onclick="Res3Click()"></div>
           </div>
-          
       </div>
          <!--
           <div class="footericons">

@@ -54,7 +54,11 @@
 			<section class="mdl-layout__tab-panel" id="info-table">
 				<div class="page-content">
 					<h3>Información de los clientes actuales:</h3>
-					<button onclick="socket.emit('testfoto')">PROBAR</button>
+					<div class="queries-cont">
+						<button onclick="socket.emit('testfoto')">PROBAR</button>
+						<p>Patente a buscar:</p>
+						<input type="text" id="pat-query">
+					</div>
 					<div class="table-cont">
 						<table>
 							<thead>
@@ -81,20 +85,12 @@
 			<section class="mdl-layout__tab-panel" id="monitor-serie">
 				<div class="page-content">
 					<div class="serie">
-						<div class="serie-rows" id="serial_information">
-							<!--<div class="row sale"><i class="material-icons">arrow_back</i>201, L</div>
-							<div class="row entra"><i class="material-icons">arrow_forward</i>203, O</div>
-							<div class="row sale"><i class="material-icons">arrow_back</i>201, L</div>
-							<div class="row entra"><i class="material-icons">arrow_forward</i>203, O</div>
-							<div class="row sale"><i class="material-icons">arrow_back</i>201, L</div>
-							<div class="row entra"><i class="material-icons">arrow_forward</i>203, O</div>
-							<div class="row sale"><i class="material-icons">arrow_back</i>201, L</div>
-							<div class="row entra"><i class="material-icons">arrow_forward</i>203, O</div>-->
-						</div>
+						<div class="serie-rows" id="serial_information"></div>
 						<div class="mdl-grid">
 							<div class="mdl-cell mdl-cell--4-col">
 								<label>ID</label>
 								<select id="serial-id">
+									<option value="150">Arduino Entrada</option>
 									<optgroup label="Utilities">
 										<% for(var i = 160; i <= 165; i++){ %>
 											<option value="<%= i %>">Utilities #<%= i %></option>
@@ -118,6 +114,11 @@
 							<div class="mdl-cell mdl-cell--4-col">
 								<label>Dato</label>
 								<select id="serial-dato">
+									<optgroup label="Entrada">
+										<option value="100">Preguntar si hay auto</option>
+										<option value="101">Levantar barrera de entrada</option>
+										<option value="102">Levantar barrera de salida</option>
+									</optgroup>
 									<optgroup label="Letras">
 										<% 
 										var l = "eran";

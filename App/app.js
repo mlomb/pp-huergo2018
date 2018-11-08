@@ -6,6 +6,8 @@ const admin = require('firebase-admin');
 const mysql = require('mysql');
 const url = require("url");
 const mp = require('mercadopago');
+const moment = require('moment');
+
 
 var datos = require('./../datos.json');
 
@@ -112,21 +114,29 @@ app.post('/api/login', function(req,res){
 
 function getMPUrl(preference, callback){
     mp.preferences.create(preference).then(function (preference) {
-        callback(preference.body.init_point);
+        callback(preference);
     }).catch(function (error) {
         console.log(error);
         callback(null);
     });
 }
 
+function checkAvailable(query, callback){
+    doQuery(query, [] , function (result) {
+        callback(result);
+    });
+}
+
 app.post('/api/pay', function(req,res){
     //CHEQUEAR SI ESTA LOGUEADO
+
     var obj = new Object();
     obj.status = 0;
     obj.data  = "";
     var salida = req.body.formSalida;
     var slot = req.body.formSlot;
 
+    //CHEQUEO DE TIEMPO
     var tiempo = salida.split(":");
     if( tiempo[0] < 00 || tiempo[0] > 24 || tiempo[1] < 00 || tiempo[1] > 60 || (tiempo[0] == 00 && tiempo[1] == 00)){
         obj.data = "Error con la selección de horas";
@@ -134,75 +144,69 @@ app.post('/api/pay', function(req,res){
         res.write(jsonObj);
         res.end();
         return;
-    }
-    var tiempoPedido = tiempo[0] * 2;
-    if(tiempo[1] != 00){
-        if(tiempo[1] > 30){
-            tiempoPedido+= 2;
-        }else{
-            tiempoPedido+= 1;
+    }else{
+        var tiempoPedido = tiempo[0] * 2;
+        if(tiempo[1] != 00){
+            if(tiempo[1] > 30){
+                tiempoPedido+= 2;
+            }else{
+                tiempoPedido+= 1;
+            }
         }
+        var entrada = moment().format('YYYY-MM-DD HH-mm-ss');
+        var salida = moment().add(tiempo[0], 'hours').add(tiempo[1], 'minutes').format('YYYY-MM-DD HH-mm-ss'); 
+        console.log("Entrada" + entrada + " | Salida : "+ salida); 
     }
     
-    switch(slot){
-        case "Normal":
-            doQuery("SELECT * FROM slots WHERE id NOT IN (200,201,202,203,204,205,206,207,220,221,222,223,224,225,226,227) AND state = 'LIBRE'", [] , function (result) {
-				if(result.length == 0){
-					obj.data = "No hay lugares disponibles para reservar en este momento. Por favor vuelva a intentar mas tarde.";
-					var jsonObj= JSON.stringify(obj);
-					res.write(jsonObj);
-					res.end();
-				}
-			});
-			var mediaHora = 50;
-        break;
-        case "Discapacitado":
-			doQuery("SELECT * FROM slots WHERE id IN (200,201,202,203,220,221,222,223) AND state = 'LIBRE'", [] , function (result) {
-				if(result.length == 0){
-					obj.data = "No hay lugares de discapacitado disponibles para reservar en este momento. Por favor vuelva a intentar mas tarde.";
-					var jsonObj= JSON.stringify(obj);
-					res.write(jsonObj);
-					res.end();
-				}
-			});
-            var mediaHora = 40;
-        break;
-        case "Premium":
-			doQuery("SELECT * FROM slots WHERE id NOT IN (204,205,206,207,224,225,226,227) AND state = 'LIBRE'", [] , function (result) {
-				if(result.length == 0){
-					obj.data = "No hay lugares premium disponibles para reservar en este momento. Por favor vuelva a intentar mas tarde.";
-					var jsonObj= JSON.stringify(obj);
-					res.write(jsonObj);
-					res.end();
-				}
-			});
-            var mediaHora = 60;
-        break;
-    }
-    var precio = mediaHora * tiempoPedido;
-    precio = 1;
-    var preference = {
-        items: [
-          item = {
-            title: 'Estacionamiento ' + slot,
-            quantity: 1,
-            currency_id: 'ARS',
-            unit_price: precio
-          }
-        ],
-    };
-     
-    getMPUrl(preference, function(url) {
-        obj.status = 1;
-        obj.data = url;   
+    
+    
+    //DISTINTOS TIPOS DE ESTACIONAMIENTOS
+    var querys = {Normal : "SELECT * FROM slots WHERE id NOT IN (200,201,202,203,204,205,206,207,220,221,222,223,224,225,226,227) AND state = 'LIBRE'" , 
+                Discapacitado : "SELECT * FROM slots WHERE id IN (200,201,202,203,220,221,222,223) AND state = 'LIBRE'",
+                Premium : "SELECT * FROM slots WHERE id NOT IN (204,205,206,207,224,225,226,227) AND state = 'LIBRE'" }
+    var precios = {Normal : 50 , 
+                Discapacitado : 40,
+                Premium : 60 }
+    
+    try{    
+        checkAvailable(querys[slot], function(result){
+            if(result.length == 0){
+                obj.data = "No hay lugares disponibles para reservar en este momento. Por favor vuelva a intentar mas tarde.";
+                var jsonObj= JSON.stringify(obj);
+                res.write(jsonObj);
+                res.end();
+            }else{
+                var mediaHora = precios[slot];
+                var precio = mediaHora * tiempoPedido;
+                var preference = {
+                    items: [
+                    item = {
+                        title: 'Estacionamiento ' + slot,
+                        quantity: 1,
+                        currency_id: 'ARS',
+                        unit_price: precio
+                    }
+                    ],
+                };
+                getMPUrl(preference, function(preference) {
+                    obj.status = 1;
+                    obj.data = preference.body.init_point;
+                    var id = preference.body.id;
+                    console.log("Preference : " +JSON.stringify(preference));
+                    var jsonObj= JSON.stringify(obj);
+                    doQuery("INSERT INTO reservas (id,id_cliente,id_pago,patente,entrada,salida,slot,pagado) VALUES ('',?,?,'',?,?,?,0)", [0,id,entrada,salida,result[0].id] , function (result) {
+                        res.write(jsonObj);
+                        res.end();
+                    });
+                });
+            }
+        })
+    }catch(e){
+        obj.data = "Ha ocurrido un error del lado del servidor";
         var jsonObj= JSON.stringify(obj);
         res.write(jsonObj);
         res.end();
-    });
-	/*
-	doQuery("INSERT INTO reservas (id,id_cliente,id_pago,patente,entrada,salida,slot,pagado) VALUES ('',?,?,'',?,?,?,0)", [] , function (result) {
-        
-    });*/
+    }
 });
 
 app.post('/mercadopago', function(req,res){
@@ -223,7 +227,6 @@ app.post('/mercadopago', function(req,res){
                         .then (processMerchantOrder);
                 });
         break;
-
         case "merchant_order":
             mp.get ("/merchant_orders/"+params.id)
                 .then (processMerchantOrder);

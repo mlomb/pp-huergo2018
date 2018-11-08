@@ -163,20 +163,21 @@ setInterval(function() {
 		success: function(result){
 			$('.table-cont table tbody').html("");
 			for(var client of result){
-				$('.table-cont table tbody').append(`
-				<tr>
-					<td>`+client.patente+`</td>
-					<td><a href=`+client.img_patente+` target="_blank"><img src="`+client.img_patente+`" alt=""></a></td>
-					<td>`+client.slot+`</td>
-					<td>`+new Date(client.llegada).toLocaleTimeString()+`</td>
-					<td>`+new Date(client.salida).toLocaleTimeString()+`</td>
-				 </tr>
-				`);
+				if(client.patente==$("#pat-query").val().toUpperCase() || $("#pat-query").val()==""){
+					$('.table-cont table tbody').append(`
+					<tr>
+						<td>`+client.patente+`</td>
+						<td><a href=`+client.img_patente+` target="_blank"><img src="`+client.img_patente+`" alt=""></a></td>
+						<td>`+client.slot+`</td>
+						<td>`+new Date(client.llegada).toLocaleTimeString()+`</td>
+						<td>`+new Date(client.salida).toLocaleTimeString()+`</td>
+					 </tr>
+					`);
+				}
 			}
 		}
     });
 }, 1000);
-
 
 
 $("#serial-send").click(function() {

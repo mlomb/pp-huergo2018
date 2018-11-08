@@ -19,6 +19,7 @@ h3, h4 {
 }
 body{
 	overflow-x:hidden;
+    overflow-y:hidden;
     text-align: center;
 }
 #reservationPage{
@@ -30,7 +31,7 @@ body{
 .main{
     width: 100vw;
     height: 100vh;
-    background-image: url(/images/1366bg.jpg);
+    background-image: url(../images/1366bg.jpg);
     background-size: cover;
     background-position: center;
 }   
@@ -372,12 +373,12 @@ header .mdl-layout__drawer-button{
 --------------*/
 
 .login-box{
-    width: 350px;
+    width: 280px;
     margin-left: auto;
     margin-right: auto;
-    background-color: black;
-    padding: 40px 60px;
-    border-radius: 20px;
+    padding: 20px 30px 5px 30px;
+    border-radius: 5px;
+    background-color: rgba(24, 43, 74, 0.4);
 }
 .login-box > form > * {
     display: block;
@@ -511,7 +512,7 @@ header .mdl-layout__drawer-button{
             APP    320x568
 ----------------------------------*/
 main.mdl-layout__content {
-    background: url(/images/1366bg.jpg) center / cover;
+    background: url(../images/1366bg.jpg) center / cover;
 }
 .demo-layout-transparent .mdl-layout__header,
 .demo-layout-transparent .mdl-layout__drawer-button {
@@ -519,6 +520,20 @@ main.mdl-layout__content {
      your background is light. */
   color: white;
 }
+
+.appOverlay{
+    width: 100vw;
+    height: 50vh;
+    background: linear-gradient(rgba(0, 0, 0, 0) -30%,#181818);
+    opacity: 1;
+}
+.bottomBlack{
+    width: 100vw;
+    height: 50vh;
+    background-color: #181818;
+
+}
+
 /*         ----APP MAIN----          */
 #asdf{
     position: absolute;
@@ -528,12 +543,26 @@ main.mdl-layout__content {
 .textcontent{
     height: 350px;
     width: 70vw;
-    margin: 200px auto auto auto;
+    margin: 150px auto auto auto;
 }
 #nextbtncontainer {
     width: 40px;
     display: inline-block;
     height: 40px;
+    float: right;
+    vertical-align: middle;
+    border-radius: 50%;
+    text-align: center;
+    border: 2px solid #cc771c;
+    margin: auto;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+}
+#InicioSesionNextbtncontainer {
+    width: 30px;
+    display: inline-block;
+    height: 30px;
     float: right;
     vertical-align: middle;
     border-radius: 50%;
@@ -558,16 +587,38 @@ main.mdl-layout__content {
     left: 10px;
     top: 50%;
 }
+#InicioSesionPrevbtncontainer {
+    width: 30px;
+    display: inline-block;
+    height: 30px;
+    float: left;
+    vertical-align: middle;
+    border-radius: 50%;
+    text-align: center;
+    border: 2px solid #cc771c;
+    margin: auto;
+    position: absolute;
+    left: 10px;
+    top: 50%;
+}
 .appbtnsiguiente{
-    background-image: url(/images/Extras/right-chevron.png);
+    background-image: url(../images/Extras/right-chevron.png);
     background-size: cover;
     background-position: center;
     width: 25px;
     height: 25px;
     margin: 6px 3px 0px auto;
 }
+.appInicioSesionBtnNext{
+    background-image: url(../images/Extras/right-chevron.png);
+    background-size: cover;
+    background-position: center;
+    width: 15px;
+    height: 20px;
+    margin: 3px 3px 0px 8px;
+}
 .appbtnanterior{
-    background-image: url(/images/Extras/left-chevron.png);
+    background-image: url(../images/Extras/left-chevron.png);
     background-size: cover;
     background-position: center;
     width: 25px;
@@ -575,14 +626,21 @@ main.mdl-layout__content {
     margin: 6px 8px 0px auto; 
 }
 /**** steps container ********/
-#AppMainContainer{
+#AppInicioSesionContainer{
     display: block;
+    margin-top: -100vh;    
+}
+#AppMainContainer{
+    display: none;
+    margin-top: -100vh;
 }
 #AppPasoUnoContainer{
     display: none;
+    margin-top: -100vh;
 }
 #AppPasoDosContainer{
     display: none;
+    margin-top: -100vh;
 }
 /*****************************/
 /*           STEP 1           */
@@ -609,20 +667,39 @@ main.mdl-layout__content {
     margin: 24px 0;
     margin-top: 60px;
 }
+.AppStep2Subtitle{
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -.05em;
+    margin: 24px 0;
+    margin-top: 60px;
+}
+#registerTitle{
+    font-size: 30px;
+}
+.AppRegisterSubtitle{
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -.05em;
+    margin-top: -20px; 
+}
 /* END of STEP 1 */ 
 /*  step 2 */
 .optTipoResContainer{
     width: 100vw;
     height: 40px;
-    background-color: red;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
 }
 .optTipoResContainer h3 {
-    font-size: 15px;
+    font-size: 14px;
     color: white;
-    font-weight: 500!important;
+    font-weight: 600!important;
     margin-top: 0px!important;
     margin: 15px;
 /*
@@ -638,7 +715,7 @@ main.mdl-layout__content {
 .ResRightContainer{
     width: 70vw;
     height: 200px;
-    background-color: #ff8400;
+    background-color: white;
     margin: 30px auto auto auto;
     display: flex;
 }
@@ -647,7 +724,34 @@ main.mdl-layout__content {
     height: 97%;
     background-color: azure;
     margin: auto;
-    background-image: url(/images/discapacitados.jpg);
+    background-image: url(../images/normal.jpg);
+    -webkit-transition: all ease 1s;
+    -o-transition: all ease 1s;
+    transition: all ease 1s;
+}
+.optResImage2{
+    width: 97%;
+    height: 97%;
+    background-color: azure;
+    margin: auto;
+    background-image: url(../images/discapacitados.jpg);
+    -webkit-transition: all ease 1s;
+    -o-transition: all ease 1s;
+    transition: all ease 1s;
+}
+.optResImage3{
+    width: 97%;
+    height: 97%;
+    background-color: azure;
+    margin: auto;
+    background-size: cover;
+    background-image: url(../images/premium.jpg);
+    -webkit-transition: all ease 1s;
+    -o-transition: all ease 1s;
+    transition: all ease 1s;
+}
+.optResImageActive{
+    width: 500%;
 }
 .optResText{
     

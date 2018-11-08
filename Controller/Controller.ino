@@ -51,7 +51,7 @@ struct Numerito {
   int last_num;
 };
 
-#define NUM_NUMERITOS 1
+#define NUM_NUMERITOS 2
 Numerito numeritos[NUM_NUMERITOS];
 const unsigned char NUMERITOS_START = 170;
 
@@ -62,6 +62,7 @@ void setup() {
   displays[0].write_pointer = strlen(msg1);
 
   numeritos[0] = { 200, 207 };
+  numeritos[1] = { 208, 215 };
   
   // Serial = Arduino y server
   Serial.begin(9600);
