@@ -1,6 +1,6 @@
 const int BUFFER_SIZE = 2;
 const int BUS_TIMEOUT = 20; // en ms
-const unsigned char PLACAS = 16;
+const unsigned char PLACAS = 40;
 const unsigned char PLACAS_START = 200;
 
 unsigned char BUFFER[BUFFER_SIZE];
@@ -51,7 +51,7 @@ struct Numerito {
   int last_num;
 };
 
-#define NUM_NUMERITOS 2
+#define NUM_NUMERITOS 5
 Numerito numeritos[NUM_NUMERITOS];
 const unsigned char NUMERITOS_START = 170;
 
@@ -63,6 +63,10 @@ void setup() {
 
   numeritos[0] = { 200, 207 };
   numeritos[1] = { 208, 215 };
+  numeritos[2] = { 220, 227 };
+  numeritos[3] = { 228, 235 };
+  numeritos[4] = { 200, 239 };
+  //numeritos[5] = { 228, 235 };
   
   // Serial = Arduino y server
   Serial.begin(9600);
@@ -252,7 +256,7 @@ void bus_loop() {
       }
       BUFFER[0] = Serial1.read();
       
-      if(BUFFER[1] >= 160) {
+      if(BUFFER[1] >= 150) {
         // si es >= siginifica que tenemos un paquete valido en BUFFER
         
         // lo procesamos
