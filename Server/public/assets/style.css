@@ -76,10 +76,10 @@ button#stop-panic {
 	display: inline;
 }
 .serie .row.sale {
-	background: #ff7a7a5c;
+	background: rgba(255, 122, 122, 0.36);
 }
 .serie .row.entra {
-	background: #94ff7a5c;
+	background: rgba(148, 255, 122, 0.36);
 }
 button#serial-send:hover{
 	background-color: rgb(63,81,181);
@@ -127,7 +127,7 @@ select#serial-dato{
 .cochera {
 	width: 66.7px;
 	height: 31.7px;
-	background: #ff000096;
+	background: rgba(255, 0, 0, 0.58);
 	position: absolute;
 	cursor: pointer;
 }

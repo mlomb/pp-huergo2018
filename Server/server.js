@@ -140,7 +140,7 @@ Controller.onDataReceived = function(data) {
 		
 		var valid = false;
 		
-		if(id >= 200) {
+		if(id >= 150) {
 			valid = true;
 			
 			var estado = buffer.shift();
