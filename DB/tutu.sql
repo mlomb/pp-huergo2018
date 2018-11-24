@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 21-11-2018 a las 22:25:45
+-- Tiempo de generación: 24-11-2018 a las 12:01:44
 -- Versión del servidor: 10.1.23-MariaDB-9+deb9u1
 -- Versión de PHP: 7.0.30-0+deb9u1
 
@@ -37,10 +37,22 @@ CREATE TABLE `actual_clients` (
 --
 
 CREATE TABLE `reservas` (
-  `id` varchar(6) NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_cliente` varchar(100) NOT NULL,
+  `id_pago` varchar(100) NOT NULL,
+  `patente` varchar(20) NOT NULL,
   `entrada` datetime NOT NULL,
-  `salida` datetime NOT NULL
+  `salida` datetime NOT NULL,
+  `slot` int(11) NOT NULL,
+  `pagado` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `reservas`
+--
+
+INSERT INTO `reservas` (`id`, `id_cliente`, `id_pago`, `patente`, `entrada`, `salida`, `slot`, `pagado`) VALUES
+(1, '0', '207628513-d5cd7f73-f63d-4211-b1fc-e9f55c4e3eb9', '', '2018-11-24 10:58:27', '2018-11-24 11:58:27', 200, 0);
 
 -- --------------------------------------------------------
 
@@ -68,36 +80,56 @@ INSERT INTO `slots` (`id`, `state`) VALUES
 (207, 'LIBRE'),
 (208, 'LIBRE'),
 (209, 'LIBRE'),
-(210, 'LIBRE'),
-(211, 'LIBRE'),
-(212, 'LIBRE'),
-(213, 'LIBRE'),
-(214, 'LIBRE'),
-(215, 'LIBRE'),
-(216, 'LIBRE'),
-(217, 'LIBRE'),
-(218, 'LIBRE'),
-(219, 'LIBRE'),
-(220, 'LIBRE'),
-(221, 'LIBRE'),
-(222, 'LIBRE'),
-(223, 'LIBRE'),
-(224, 'LIBRE'),
-(225, 'LIBRE'),
-(226, 'LIBRE'),
-(227, 'LIBRE'),
-(228, 'LIBRE'),
-(229, 'LIBRE'),
-(230, 'LIBRE'),
-(231, 'LIBRE'),
-(232, 'LIBRE'),
-(233, 'LIBRE'),
-(234, 'LIBRE'),
-(235, 'LIBRE'),
-(236, 'LIBRE'),
-(237, 'LIBRE'),
-(238, 'LIBRE'),
-(239, 'LIBRE');
+(210, 'OCUPADO'),
+(211, 'OCUPADO'),
+(212, 'OCUPADO'),
+(213, 'OCUPADO'),
+(214, 'OCUPADO'),
+(215, 'OCUPADO'),
+(216, 'OCUPADO'),
+(217, 'OCUPADO'),
+(218, 'OCUPADO'),
+(219, 'OCUPADO'),
+(220, 'OCUPADO'),
+(221, 'OCUPADO'),
+(222, 'OCUPADO'),
+(223, 'OCUPADO'),
+(224, 'OCUPADO'),
+(225, 'OCUPADO'),
+(226, 'OCUPADO'),
+(227, 'OCUPADO'),
+(228, 'OCUPADO'),
+(229, 'OCUPADO'),
+(230, 'OCUPADO'),
+(231, 'OCUPADO'),
+(232, 'OCUPADO'),
+(233, 'OCUPADO'),
+(234, 'OCUPADO'),
+(235, 'OCUPADO'),
+(236, 'OCUPADO'),
+(237, 'OCUPADO'),
+(238, 'OCUPADO'),
+(239, 'OCUPADO');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `users_app`
+--
+
+CREATE TABLE `users_app` (
+  `id` varchar(100) NOT NULL,
+  `nombre` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `users_app`
+--
+
+INSERT INTO `users_app` (`id`, `nombre`, `email`, `password`) VALUES
+('19f7spX4oLOvTGZgr9Ic8HYuu8D2', 'Bartolomeo Adrian Gonzalez', '', '');
 
 --
 -- Índices para tablas volcadas
@@ -113,13 +145,19 @@ ALTER TABLE `actual_clients`
 -- Indices de la tabla `reservas`
 --
 ALTER TABLE `reservas`
-  ADD UNIQUE KEY `id` (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `slots`
 --
 ALTER TABLE `slots`
   ADD UNIQUE KEY `id` (`id`);
+
+--
+-- Indices de la tabla `users_app`
+--
+ALTER TABLE `users_app`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -130,6 +168,11 @@ ALTER TABLE `slots`
 --
 ALTER TABLE `actual_clients`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `reservas`
+--
+ALTER TABLE `reservas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

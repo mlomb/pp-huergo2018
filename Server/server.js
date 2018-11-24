@@ -140,12 +140,7 @@ Controller.onDataReceived = function(data) {
 		
 		var valid = false;
 		
-		if(id >= 150) {
-			valid = true;
-			
-			var estado = buffer.shift();
-			placas_estados[id] = estado == 76;
-		} else if((id+"") in utilities_estados) {
+		if((id+"") in utilities_estados) {
 			valid = true;
 			
 			var pulsado = buffer.shift();
@@ -156,6 +151,11 @@ Controller.onDataReceived = function(data) {
 				toggleAllUtilities("alarm", true);
 				syncUtilities();
 			}
+		} else if(id >= 150) {
+			valid = true;
+			
+			var estado = buffer.shift();
+			placas_estados[id] = estado == 76;
 		}
 		
 		if(valid) {

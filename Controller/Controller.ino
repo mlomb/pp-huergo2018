@@ -51,7 +51,7 @@ struct Numerito {
   int last_num;
 };
 
-#define NUM_NUMERITOS 5
+#define NUM_NUMERITOS 6
 Numerito numeritos[NUM_NUMERITOS];
 const unsigned char NUMERITOS_START = 170;
 
@@ -66,7 +66,7 @@ void setup() {
   numeritos[2] = { 220, 227 };
   numeritos[3] = { 228, 235 };
   numeritos[4] = { 200, 239 };
-  //numeritos[5] = { 228, 235 };
+  numeritos[5] = { 216, 239 };
   
   // Serial = Arduino y server
   Serial.begin(9600);
@@ -142,8 +142,11 @@ void bus_next() {
   for(int i = 0; i < NUM_NUMERITOS; i++) {
     numeritos[i].num = 0;
     for(int id = numeritos[i].start - PLACAS_START; id <= numeritos[i].end - PLACAS_START; id++) {
-      if(cocheras[id].last_mode == 'n' && cocheras[id].last_estado)
-        numeritos[i].num++;
+      if(i != 5 || (id < 220 - PLACAS_START || id > 235 - PLACAS_START)) {
+        if(cocheras[id].last_mode == 'n' && cocheras[id].last_estado) {
+          numeritos[i].num++;
+        }
+      }
     }
     if(numeritos[i].num != numeritos[i].last_num) {
       bus_send(i + NUMERITOS_START, (unsigned char)numeritos[i].num, false);
