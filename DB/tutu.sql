@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 24-11-2018 a las 12:01:44
+-- Tiempo de generación: 28-11-2018 a las 22:41:16
 -- Versión del servidor: 10.1.23-MariaDB-9+deb9u1
 -- Versión de PHP: 7.0.30-0+deb9u1
 
@@ -27,7 +27,11 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `actual_clients` (
-  `id` int(11) NOT NULL
+  `id` int(11) NOT NULL,
+  `patente` varchar(7) NOT NULL,
+  `img_patente` varchar(200) NOT NULL,
+  `llegada` datetime NOT NULL,
+  `tipo_vehiculo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -40,6 +44,7 @@ CREATE TABLE `reservas` (
   `id` int(11) NOT NULL,
   `id_cliente` varchar(100) NOT NULL,
   `id_pago` varchar(100) NOT NULL,
+  `7` varchar(10) NOT NULL,
   `patente` varchar(20) NOT NULL,
   `entrada` datetime NOT NULL,
   `salida` datetime NOT NULL,
@@ -51,8 +56,14 @@ CREATE TABLE `reservas` (
 -- Volcado de datos para la tabla `reservas`
 --
 
-INSERT INTO `reservas` (`id`, `id_cliente`, `id_pago`, `patente`, `entrada`, `salida`, `slot`, `pagado`) VALUES
-(1, '0', '207628513-d5cd7f73-f63d-4211-b1fc-e9f55c4e3eb9', '', '2018-11-24 10:58:27', '2018-11-24 11:58:27', 200, 0);
+INSERT INTO `reservas` (`id`, `id_cliente`, `id_pago`, `7`, `patente`, `entrada`, `salida`, `slot`, `pagado`) VALUES
+(1, '0', '207628513-d5cd7f73-f63d-4211-b1fc-e9f55c4e3eb9', '', '', '2018-11-24 10:58:27', '2018-11-24 11:58:27', 200, 0),
+(2, '0', '207628513-dcb7d760-5e13-4e38-aa06-7ca70a3cd168', '', '', '2018-11-24 11:07:27', '2018-11-24 12:07:27', 200, 0),
+(3, '0', '207628513-a3fff4b2-06aa-4dcc-8b6c-f7d0962e8782', '', '', '2018-11-24 11:11:45', '2018-11-24 12:11:45', 200, 0),
+(4, '0', '207628513-1ef2159f-6156-4501-9169-f1b28bcf4b07', '', '', '2018-11-24 11:18:53', '2018-11-24 15:18:53', 208, 0),
+(5, '19f7spX4oLOvTGZgr9Ic8HYuu8D2', '207628513-1127a865-2086-48b8-bec2-0cd2502be1b7', '', '', '2018-11-24 11:36:02', '2018-11-24 12:36:02', 200, 0),
+(6, '19f7spX4oLOvTGZgr9Ic8HYuu8D2', '207628513-840d8160-3e18-4cee-be10-a42b6342a2a1', '', '', '2018-11-24 11:36:30', '2018-11-24 12:36:30', 200, 0),
+(7, '19f7spX4oLOvTGZgr9Ic8HYuu8D2', '207628513-fa15430d-4e12-456f-b1f3-fc1eb9e6f8f5', '2bTek0z', '', '2018-11-24 11:42:13', '2018-11-24 12:42:13', 200, 0);
 
 -- --------------------------------------------------------
 
@@ -80,19 +91,19 @@ INSERT INTO `slots` (`id`, `state`) VALUES
 (207, 'LIBRE'),
 (208, 'LIBRE'),
 (209, 'LIBRE'),
-(210, 'OCUPADO'),
-(211, 'OCUPADO'),
-(212, 'OCUPADO'),
-(213, 'OCUPADO'),
-(214, 'OCUPADO'),
-(215, 'OCUPADO'),
-(216, 'OCUPADO'),
-(217, 'OCUPADO'),
-(218, 'OCUPADO'),
-(219, 'OCUPADO'),
-(220, 'OCUPADO'),
-(221, 'OCUPADO'),
-(222, 'OCUPADO'),
+(210, 'LIBRE'),
+(211, 'LIBRE'),
+(212, 'LIBRE'),
+(213, 'LIBRE'),
+(214, 'LIBRE'),
+(215, 'LIBRE'),
+(216, 'LIBRE'),
+(217, 'LIBRE'),
+(218, 'LIBRE'),
+(219, 'LIBRE'),
+(220, 'LIBRE'),
+(221, 'LIBRE'),
+(222, 'LIBRE'),
 (223, 'OCUPADO'),
 (224, 'OCUPADO'),
 (225, 'OCUPADO'),
@@ -167,12 +178,12 @@ ALTER TABLE `users_app`
 -- AUTO_INCREMENT de la tabla `actual_clients`
 --
 ALTER TABLE `actual_clients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `reservas`
 --
 ALTER TABLE `reservas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

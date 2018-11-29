@@ -8,6 +8,8 @@ const url = require("url");
 const mp = require('mercadopago');
 const moment = require('moment');
 const randomstring = require("randomstring");
+const JsBarcode = require('jsbarcode');
+const Canvas = require("canvas");
 
 
 var datos = require('./../datos.json');
@@ -267,7 +269,8 @@ app.post('/mercadopago', function(req,res){
                             var mail = result[0]['email'];
                             if(result[0]['pagado'] == 0){
                                 doQuery("UPDATE reservas SET pagado = 1 WHERE id_pago = ? ;", [merchant_order_info["response"]["preference_id"]] , function (result) {
-                                    //TODO OK
+                                    var canvas = new Canvas();
+                                    JsBarcode(canvas, "Hello");
                                 });
                             }
                         });
@@ -277,7 +280,8 @@ app.post('/mercadopago', function(req,res){
                         var mail = result[0]['email'];
                         if(result[0]['pagado'] == 0){
                             doQuery("UPDATE reservas SET pagado = 1 WHERE id_pago = ? ;", [merchant_order_info["response"]["preference_id"]] , function (result) {
-                                //TODO OK
+                                var canvas = new Canvas();
+                                JsBarcode(canvas, "Hello");
                             });
                         }
                     });

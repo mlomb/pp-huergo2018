@@ -177,6 +177,8 @@ void bus_next() {
     } else if(barrido_last <= PLACAS + 6) { // +1 cantidad de utilities
       // botones de panico
       bus_send(barrido_last - PLACAS - 1 + 160, '(', true);
+    } else if(barrido_last <= PLACAS + 6 + 1) { // +1 entrada
+      bus_send(150, 'd', true); // 100
     } else {
       barrido_last = -1;
     }

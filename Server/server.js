@@ -21,7 +21,7 @@ var utilities_estados = {
 };
 var utilities_estados_last = {};
 var displays = {
-	"150": "huergo compu"
+	"190": "huergo compu"
 };
 var panico = {
 	id: 0
@@ -50,7 +50,7 @@ function syncDatabase() {
 }
 function syncReservas() {
 	//return;
-	pool.query("SELECT * FROM reservas WHERE NOW() BETWEEN entrada AND salida", function (error, results, fields) {
+	pool.query("SELECT * FROM reservas WHERE pagado=1 AND NOW() BETWEEN entrada AND salida", function (error, results, fields) {
 		if (error) throw error;
 		var reservas_estados = {};
 		for(var id in placas_estados)
@@ -151,7 +151,21 @@ Controller.onDataReceived = function(data) {
 				toggleAllUtilities("alarm", true);
 				syncUtilities();
 			}
-		} else if(id >= 150) {
+		} else if(id == 150) {
+			valid = true;
+			
+			var estado = buffer.shift();
+			
+			if(estado != -10) {
+				console.log("ESTADO DE LA ENTRADA: " + estado);
+				
+				if(estado == 20) console.log("Entra una camioneta");
+				else if(estado == 30) console.log("Entra un auto");
+				
+				sacarFoto(estado);
+			}
+			
+		} else if(id > 150) {
 			valid = true;
 			
 			var estado = buffer.shift();
@@ -177,6 +191,27 @@ function toggleAllUtilities(name, active) {
 	}
 }
 
+function fotoResult(resultado) {
+	console.log("Ingresando patente: " + resultado.patente + ", Tipo: " + resultado.tipo_vehiculo);
+	pool.query('INSERT INTO actual_clients (patente, img_patente, llegada, tipo_vehiculo) VALUES (?, ?, NOW(), ?)', [resultado.patente, "/patentes-imgs/" + resultado.image, resultado.tipo_vehiculo], function (error, results, fields) {
+		if (error) throw error;
+	});
+}
+function sacarFoto(tipo_vehiculo) {
+	sacando_foto = true;
+
+	Recognition.getPatente(function(resultado) {
+		sacando_foto = false;
+		if(resultado.patente == null) {
+			console.log("No se pudo reconocer la patente.");
+			//socket.emit('alert', "No se pudo reconocer la patente.");
+			io.emit('input_patente', resultado);
+		} else {
+			resultado.tipo_vehiculo = tipo_vehiculo;
+			fotoResult(resultado);
+		}
+	});
+}
 
 app.use(express.static(__dirname + '/public'));
 app.engine('html', require('ejs').renderFile);
@@ -223,12 +258,6 @@ io.on('connection', function (socket) {
 	});
 	
 	/* -------- */
-	function fotoResult(resultado) {
-		console.log("Ingresando patente: " + resultado.patente);
-		pool.query('INSERT INTO actual_clients (patente, img_patente, llegada) VALUES (?, ?, NOW())', [resultado.patente, "/patentes-imgs/" + resultado.image], function (error, results, fields) {
-			if (error) throw error;
-		});
-	}
 	var sacando_foto = false;
 	socket.on('testfoto', function (active) {
 		if(sacando_foto) {
@@ -236,18 +265,7 @@ io.on('connection', function (socket) {
 			return;
 		}
 		socket.emit('alert', "Sacando foto");
-		sacando_foto = true;
-
-		Recognition.getPatente(function(resultado) {
-			sacando_foto = false;
-			if(resultado.patente == null) {
-				console.log("No se pudo reconocer la patente.");
-				//socket.emit('alert', "No se pudo reconocer la patente.");
-				socket.emit('input_patente', resultado);
-			} else {
-				fotoResult(resultado);
-			}
-		});
+		sacarFoto(20);
 	});
 	socket.on('input_patente_resultado', fotoResult);
 	/* -------- */
